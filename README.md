@@ -1,2 +1,2 @@
-# IOC-UNESCO_WORKSHOP
+# IOC-UNESCO WORKSHOP CAPE VERDE
 Repository to Share Code and Resources
