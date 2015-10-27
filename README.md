@@ -16,7 +16,7 @@ And you are ready to edit and update this repository and the code:
 var ArcNode = require('arc-node'),
     service = new ArcNode(<config object>);
 ```
-Check here  *[GitHub Tutorials](https://guides.github.com/activities/hello-world/)* to learn about GitHub.
+Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitHub.
 
 ### Documentation
 * [Directory of Atmospheric, Hydrographic and Biological datasets for the Canary Current Large Marine Ecosystem](http://unesdoc.unesco.org/images/0023/002314/231430E.pdf)
