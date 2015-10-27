@@ -9,7 +9,7 @@ Repository to Share Code and Resources
 ## How use it
 
 Just clone this repository in your local machine:
-```[IOC-UNESCO WORKSHOP CAPE VERDE](https://github.com/lmagudo/IOC-UNESCO_WORKSHOP.git)```
+https://github.com/lmagudo/IOC-UNESCO_WORKSHOP.git
 
 And you are ready to edit and update this repository and the code:
 ```javascript
