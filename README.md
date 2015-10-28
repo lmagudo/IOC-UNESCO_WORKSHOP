@@ -29,7 +29,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 
 ### Presentations
 * [Workshop on Update of metadata, data availability and application needs for a CCLME Eco-GIS viewer](https://slides.com/lmagudo/workshop-on-update-of-metadata-data-availability-and-application-needs-for-a-cclme-eco-gis-viewer/edit)
-* [Current state of geoprocessing development on the web applications_Luis Miguel Agudo](presentations/Current state of geoprocessing development on the web applications_Luis Miguel Agudo.pdf)
+* [Current state of geoprocessing development on the web applications_Luis Miguel Agudo](Presentations/Current state of geoprocessing development on the web applications_Luis Miguel Agudo.pdf)
 
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
