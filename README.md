@@ -21,10 +21,10 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 ### Documentation
 * [AGENDA IOC-UNESCO Workshop](AGENDA IOC-UNESCO Workshop 20151027.docx)
 * [Directory of Atmospheric, Hydrographic and Biological datasets for the Canary Current Large Marine Ecosystem](http://unesdoc.unesco.org/images/0023/002314/231430E.pdf)
-* 
+
 ![ScreenShot](Directory _Atmospheric_Hydrographic_Biological_datasets_Canary_Current_Large_Marine_Ecosystem.jpg)
 * [Oceanographic and biological features in the Canary Current Large Marine Ecosystem](http://unesdoc.unesco.org/images/0023/002332/233299E.pdf)
-* 
+
 ![ScreenShot](Oceanographic_Biological_features_CCLME.png)
 
 ### Presentations
