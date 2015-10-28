@@ -1,11 +1,6 @@
 # IOC-UNESCO WORKSHOP CAPE VERDE
 Repository to Share Code and Resources
 
-## Index
-* [Documentation](#Documentation)
-* [Presentations](#Presentations)
-* [Resources](#Resources)
-
 ## How use it
 
 Just clone this repository in your local machine:
@@ -17,6 +12,11 @@ var ArcNode = require('arc-node'),
     service = new ArcNode(<config object>);
 ```
 Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitHub.
+
+## Index
+* [Documentation](#Documentation)
+* [Presentations](#Presentations)
+* [Resources](#Resources)
 
 ### Documentation
 * [AGENDA IOC-UNESCO Workshop](AGENDA IOC-UNESCO Workshop 20151027.docx)
