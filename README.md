@@ -31,6 +31,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [Workshop on Update of metadata, data availability and application needs for a CCLME Eco-GIS viewer](https://slides.com/lmagudo/workshop-on-update-of-metadata-data-availability-and-application-needs-for-a-cclme-eco-gis-viewer/edit)
 * [Current state of geoprocessing development on the web applications_Luis Miguel Agudo](Presentations/Current state of geoprocessing development on the web applications_Luis Miguel Agudo.pdf)
 * [Presentation of the Prototype of the CCLME Eco-GIS Viewer and prospects of needs for applications_Luis Miguel Agudo](Presentations/Presentation_Prototype_CCLME_Eco-GIS_Viewer.pdf)
+* [Presentation Current State of Geoprocessing Development on the Web Applications: NODE.js, R in the Server, ArcGIS Server and Geoserver_Luis Miguel Agudo](Presentation_Current_State_Geoprocessing_Development_Web_Applications.pdf)
 
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
