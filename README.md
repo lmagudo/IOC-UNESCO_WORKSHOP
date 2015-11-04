@@ -35,6 +35,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [GIS applications, spatial modelling and open data portal_Ana Barbosa](Presentations/PPT_IOC_UNESCO_MPR_NOV2015_BARBOSA__V3.pdf)
 * [FAO role and experiences in spatial data analysis supporting fisheries_Fabio Carocci](Presentations/Presentation_FAO_role_experiences_spatial_data_analysis_supporting_fisheries.pdf)
 * [IEO Spatial Data Infrastructure_Olvido Tello](Presentations/Presentation_IEO.pdf)
+* [SHOM public platform for GIS data (data.shom.fr portal)_Nathalie Leidinger](Presentations/Presentation_shom.pdf)
 
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
