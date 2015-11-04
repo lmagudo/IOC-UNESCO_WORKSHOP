@@ -28,11 +28,11 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 ![ScreenShot](Oceanographic_Biological_features_CCLME.png)
 
 ### Presentations
-* [Presentation Workshop Agenda Organization_Itahisa Deniz](Presentations/Presentation_ Workshop_agenda_organization.pdf)
+* [Workshop Agenda Organization_Itahisa Deniz](Presentations/Presentation_ Workshop_agenda_organization.pdf)
 * [Workshop on Update of metadata, data availability and application needs for a CCLME Eco-GIS viewer](https://slides.com/lmagudo/workshop-on-update-of-metadata-data-availability-and-application-needs-for-a-cclme-eco-gis-viewer)
 * [Current state of geoprocessing development on the web applications_Luis Miguel Agudo](Presentations/Current state of geoprocessing development on the web applications_Luis Miguel Agudo.pdf)
 * [Presentation of the Prototype of the CCLME Eco-GIS Viewer and prospects of needs for applications_Luis Miguel Agudo](Presentations/Presentation_Prototype_CCLME_Eco-GIS_Viewer.pdf)
-* [Presentation GIS applications, spatial modelling and open data portal_Ana Barbosa](Presentations/PPT_IOC_UNESCO_MPR_NOV2015_BARBOSA__V3.pdf)
+* [GIS applications, spatial modelling and open data portal_Ana Barbosa](Presentations/PPT_IOC_UNESCO_MPR_NOV2015_BARBOSA__V3.pdf)
 * [FAO role and experiences in spatial data analysis supporting fisheries_Fabio Carocci](Presentations/Presentation_FAO_role_experiences_spatial_data_analysis_supporting_fisheries.pdf)
 * [IEO Spatial Data Infrastructure_Olvido Tello](Presentations/Presentation_IEO.pdf)
 
