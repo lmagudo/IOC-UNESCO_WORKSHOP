@@ -40,3 +40,4 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
 * [Upwelling Index -  RAIA project](http://www.indicedeafloramiento.ieo.es/afloramiento_en.html) Upwelling index time series provided by the Instituto Español de Oceanografía. This index was calculated using sea level pressure of the Meteogalicia WRF atmosferic model.
+* [CVOO - Cape Verde Ocean Observatory] (http://cvoo.geomar.de/index.php?id=85)
