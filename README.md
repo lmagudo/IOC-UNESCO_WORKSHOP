@@ -48,4 +48,4 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [Particularly Sensitive Sea Areas](http://www.imo.org/en/OurWork/Environment/PSSAs/Pages/Default.aspx)
 
 ### First Ideas
-[New Ideas for analysis and visualization tools](New Ideas for analysis and visualization tools.docx)
+[New Ideas for analysis and visualization tools](Workplan proposal IOC-UNESCO workshop.xlsx)
