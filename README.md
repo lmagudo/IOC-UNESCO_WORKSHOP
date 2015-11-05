@@ -38,7 +38,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [IEO Spatial Data Infrastructure_Olvido Tello](Presentations/Presentation_IEO.pdf)
 * [SHOM public platform for GIS data (data.shom.fr portal)_Nathalie Leidinger](Presentations/Presentation_shom.pdf)
 * [Cape Verde Ocean Observatory - A Multi-Platform Ocean Time-Series Station_Pericles Silva](Presentation_CVO_Multi_Platform_Ocean_Time_Series_Station.pdf)
-* [Cape Verde Ocean Observatory - A Multi-Platform Ocean Time-Series Station_Pericles Silva](Presentation_CVO_Multi_Platform_Ocean_Time_Series_Station.pdf)
+* [Canary Current Large Marine Ecosystem (CCLME) Coastal Marine Atlas](Presentation__CCLME_Coastal_Marine_Atlas.pdf)
 
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
