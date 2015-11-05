@@ -37,7 +37,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [FAO role and experiences in spatial data analysis supporting fisheries_Fabio Carocci](Presentations/Presentation_FAO_role_experiences_spatial_data_analysis_supporting_fisheries.pdf)
 * [IEO Spatial Data Infrastructure_Olvido Tello](Presentations/Presentation_IEO.pdf)
 * [SHOM public platform for GIS data (data.shom.fr portal)_Nathalie Leidinger](Presentations/Presentation_shom.pdf)
-* [Cape Verde Ocean Observatory A Multi-Platform Ocean Time-Series Station](Presentation_CVO_Multi_Platform_Ocean_Time_Series_Station.pdf)
+* [Cape Verde Ocean Observatory - A Multi-Platform Ocean Time-Series Station](Presentation_CVO_Multi_Platform_Ocean_Time_Series_Station.pdf)
 
 ### Resources
 * [ArcNode for ArcGIS](https://github.com/esri-es/ArcNode) Node module to work with ArcGIS Online and ArcGIS Server.
