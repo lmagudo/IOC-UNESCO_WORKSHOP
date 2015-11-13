@@ -46,6 +46,7 @@ Check here  *[GitHub Tutorials](https://guides.github.com/)* to learn about GitH
 * [Upwelling Index -  RAIA project](http://www.indicedeafloramiento.ieo.es/afloramiento_en.html) Upwelling index time series provided by the Instituto Español de Oceanografía. This index was calculated using sea level pressure of the Meteogalicia WRF atmosferic model.
 * [CVOO - Cape Verde Ocean Observatory] (http://cvoo.geomar.de/index.php?id=85)
 * [Particularly Sensitive Sea Areas](http://www.imo.org/en/OurWork/Environment/PSSAs/Pages/Default.aspx)
+* [PHOTOS WORKSHOP](https://www.dropbox.com/sh/v1f1yfmjypt6efk/AAAENQSGOTQFUPYc5J3HMGB3a?dl=0)
 
 ### First Ideas
 [New Ideas for analysis and visualization tools](Workplan proposal IOC-UNESCO workshop.xlsx)
