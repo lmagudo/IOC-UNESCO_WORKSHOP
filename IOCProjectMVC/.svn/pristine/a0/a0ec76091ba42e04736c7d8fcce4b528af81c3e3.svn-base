@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "OceanographicAnomalies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>OceanographicAnomalies</h2>
+
+<script src="@Url.Content("~/Scripts/OceanographicAnomalies.js")"></script>

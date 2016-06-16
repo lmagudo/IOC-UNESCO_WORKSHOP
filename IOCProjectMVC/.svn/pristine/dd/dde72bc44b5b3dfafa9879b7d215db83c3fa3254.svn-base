@@ -1,0 +1,13 @@
+﻿
+/*Upwelling Index Graphic*/
+#graphicUpwelling {
+   display:none;
+}
+#tableUpwelling {
+   display:none;
+}
+
+.ButtonUpwelling {
+    float:left;
+    margin-left:10px
+}

@@ -1,0 +1,101 @@
+﻿dojoConfig = {
+    has: {
+        "dojo-firebug": true
+    },
+    packages: [
+        { name: "datatables", location: "../bower_components/datatables/media/js/jquery.dataTables.min.js", main: "jquery.dataTables.min" }
+    ],
+
+    parseOnLoad: false,
+    foo: "bar",
+    async: false, aliases: [
+        ['$', '~/bower_components/jquery/dist/jquery.min.js']
+    ]
+};
+
+var PropiedadesOceanTransects = new Object();
+PropiedadesOceanTransects.VariablesGlobales = ['map', 'startExtent'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesOceanTransects.VariablesGlobales, function (index, value) {
+        PropiedadesOceanTransects[value] = undefined;
+    });
+}
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, BasemapToggle, OverviewMap, Legend, Extent,
+    GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesOceanTransects.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesOceanTransects.map = new Map("mapDiv", {
+        extent: PropiedadesOceanTransects.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesOceanTransects.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesOceanTransects.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesOceanTransects.startExtent.xmin - buffer, PropiedadesOceanTransects.startExtent.ymin - buffer, PropiedadesOceanTransects.startExtent.xmax + buffer, PropiedadesOceanTransects.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+    //#endregion
+
+});
+//#endregion
+
+//#region Selection and queries
+$("select[name='OceanParameter']").on('change', function () {
+    changecombo();
+});
+$("select[name='Month']").on('change', function () {
+    changecombo()
+});
+
+$("select[name='Year']").on('change', function () {
+    changecombo()
+});
+
+function changecombo() {
+    PropiedadesOceanTransects.OceanParameter = $("select[name='OceanParameter']").find("option:selected").val();
+    PropiedadesOceanTransects.Month = $("select[name='Month']").find("option:selected").val();
+    PropiedadesOceanTransects.Year = $("select[name='Year']").find("option:selected").val();
+    (PropiedadesOceanTransects.OceanParameter != "" && PropiedadesOceanTransects.Month != "" && PropiedadesOceanTransects.Year != "") ? $("#ProfileDrawButton").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+}
+//#endregion

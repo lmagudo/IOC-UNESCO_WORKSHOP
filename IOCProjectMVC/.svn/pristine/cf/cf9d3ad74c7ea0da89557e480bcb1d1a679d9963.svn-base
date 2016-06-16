@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "InterpolationTools";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>InterpolationTools</h2>
+
+<script src="@Url.Content("~/Scripts/InterpolationTools.js")"></script>

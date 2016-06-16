@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    @*@Scripts.Render("~/bundles/mapas");*@    
+    
+}
+
+@*<div class="row">
+    <div class="col-lg-12 col-navbarmap">
+        <nav class="navbar navbar-default navbarmap">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modalProject">
+                        The Project
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" onclick="showhideLegend()">Legend</a></li>
+                        <li id="dropdownindexmap" class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" onclick="showhidePanel('Geodesic_Panel')">Geodesic Tools</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>*@
+    <!-- /.col-lg-12 -->
+@*</div>*@
+
+@*Map Region*@
+<div class="row ">
+    <div class="col-lg-12" id="mapDiv">
+        <!-- Homemap -->
+        <div id="HomeButton"></div>
+        <!-- Basemap -->
+        <div id="BasemapToggle"></div>
+
+        <!-- Legend -->        
+
+        <div class="panel panel-default" id="legendPanel">
+            
+            <div class="panel-body">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a class="collapsed" aria-expanded="false" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Legend</a>
+                            </h4>
+                        </div>
+                        <div style="height: 0px;" aria-expanded="false" id="collapseOne" class="panel-collapse collapse">
+                            <div class="panel-body" id="legendDiv">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a aria-expanded="false" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Layer List</a>
+                            </h4>
+                        </div>
+                        <div style="height: 0px;" aria-expanded="false" id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body" id="layersDiv">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a aria-expanded="false" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Metadata</a>
+                            </h4>
+                        </div>
+                        <div style="height: 0px;" aria-expanded="false" id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body" id="metadataDiv">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- .panel-body -->
+        </div>
+        
+        <!-- Geodesic Tools Panel -->
+        <div class="draggablePanel panel panel-info" id="Geodesic_Panel">
+            <div class="panel-heading draggable-heading">
+                <h3 class="panel-title">Geodesic Tools</h3>
+                @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+            </div>
+                <div class="panel-body">
+                    <label>Buffer Method</label>
+                    <br />
+                    <select class="combobox-container" placeholder="Choose a method" required autofocus id="GeodesicMethod" onchange="Option_selected()">
+                        <option value="">Choose a Method</option>
+                        <option value="Euclidean">Euclidean</option>
+                        <option value="Geodesic">Geodesic</option>
+                    </select>
+                    <br>
+                    <label>Unit</label>
+                    <br />
+                    <select class="combobox-container" placeholder="Choose a Unit of measure" required autofocus id="Unit" onchange="Option_selected()">
+                        <option value="">Choose a Unit of measure</option>
+                        <option value="9001">Meters</option>
+                        <option value="9036">Kilometers</option>
+                        <option value="9035">Miles</option>
+                        <option value="9030">Nautical Miles</option>
+                    </select>
+                    <br>
+                    <label>Distance</label>
+                    <br />
+                    <input type="text" id="Distance" placeholder="Type a distance" onkeyup="checkInput(this)" required value="" />
+                    <br />
+                    <h1 align="center">
+                        <button id="CreateBuffer" type="button" class="btn btn-sm btn-primary btn-navegacion" disabled="disabled" onclick="CreateBuffer()">Create Buffer</button>
+                    </h1>
+                    <h1 align="center">
+                        <button type="button" class="btn btn-sm btn-primary btn-navegacion" disabled="disabled" onclick="OpenExportPanel()">Export Result</button>
+                    </h1>
+                </div>
+            </div>
+
+        <!-- Show Coordinates -->
+        <span id="infocoord" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
+
+        <div id='msg' style='color:red;display:none;padding:4px;'>
+            'You are using a browser that
+            doesn't support drag/drop use the file upload box below to add your csv:'
+        </div>
+        <form id="uploadForm" style='display:none;padding:4px;' method="post" enctype="multipart/form-data">
+            <input type="file" name="data" id="inFile" size="15" />
+        </form>
+        <span id="status"></span>
+
+    </div>
+    <!-- /.col-lg-12 -->    
+</div>
+<!-- /.row -->
+
+<!-- Modal -->
+<div class="modal fade" id="modalProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">The project</h4>
+            </div>
+            <div class="modal-body">
+                <p>The CCLME Data Analytic Viewer prototype is a first-stage of a GIS dynamic analytic tool aimed to create meaningful data products at West Africa regional scale, adding value to raw data and producing new scientific knowledge on the ocean and coastal areas of the Canary Current Large Marine Ecosystem (CCLME) countries.</p>
+                <p>The analysis of the data using the CCLME Data Analytic Viewer facilitates the study of the dynamics and trends of a multiplicity of variables to produce new and valuable information on changes produced during the last 35 years in this region, going from climatic changes to shifts in species due to natural and human induced factors.</p>
+                <p>The Canary Current LME is a major upwelling region off the coast of northwest Africa. It extends southwards from Canary Islands (Spain) and the Atlantic coast of Morocco, Western Sahara, Mauritania, Senegal, Guinea-Bissau and Gambia, but Cape Verde and the waters of Guinea Conakry are considered adjacent areas within the zone of influence of the CCLME.</p>
+                <p>The CCLME Data Analytic Viewer has been developed under the frame of the project Enhancing Oceanography Capacities on Western Africa countries. This project has been undertaken by the Intergovernmental Oceanographic Commission of UNESCO (IOC-UNESCO), and it has been generously funded by the Spanish Agency for International Development Cooperation (AECID). IOC-UNESCO partner for this project is the Spanish Oceanographic Institute (IEO), which hosts the CCLME Data Analytic Viewer in their servers.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+<script src="@Url.Content("~/Scripts/main.js")"></script>
+<script src="@Url.Content("~/Scripts/GeodesicTools.js")"></script>
+@*<script src="@Url.Content("~/Scripts/DragDrop.js")"></script>*@

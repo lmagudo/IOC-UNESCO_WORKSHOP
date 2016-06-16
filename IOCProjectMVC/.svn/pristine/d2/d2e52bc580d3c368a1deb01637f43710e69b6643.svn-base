@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    @*@Scripts.Render("~/bundles/mapas");*@    
+    
+}
+
+<div class="row">
+    <div class="col-lg-12 col-navbarmap">
+        <nav class="navbar navbar-default navbarmap">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modalProject">
+                        The Project
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row ">
+    <div class="col-lg-12" id="mapDiv">
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<!-- Modal -->
+<div class="modal fade" id="modalProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">The project</h4>
+            </div>
+            <div class="modal-body">
+                <p>The CCLME Data Analytic Viewer prototype is a first-stage of a GIS dynamic analytic tool aimed to create meaningful data products at West Africa regional scale, adding value to raw data and producing new scientific knowledge on the ocean and coastal areas of the Canary Current Large Marine Ecosystem (CCLME) countries.</p>
+                <p>The analysis of the data using the CCLME Data Analytic Viewer facilitates the study of the dynamics and trends of a multiplicity of variables to produce new and valuable information on changes produced during the last 35 years in this region, going from climatic changes to shifts in species due to natural and human induced factors.</p>
+                <p>The Canary Current LME is a major upwelling region off the coast of northwest Africa. It extends southwards from Canary Islands (Spain) and the Atlantic coast of Morocco, Western Sahara, Mauritania, Senegal, Guinea-Bissau and Gambia, but Cape Verde and the waters of Guinea Conakry are considered adjacent areas within the zone of influence of the CCLME.</p>
+                <p>The CCLME Data Analytic Viewer has been developed under the frame of the project Enhancing Oceanography Capacities on Western Africa countries. This project has been undertaken by the Intergovernmental Oceanographic Commission of UNESCO (IOC-UNESCO), and it has been generously funded by the Spanish Agency for International Development Cooperation (AECID). IOC-UNESCO partner for this project is the Spanish Oceanographic Institute (IEO), which hosts the CCLME Data Analytic Viewer in their servers.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+<script src="@Url.Content("~/Scripts/main.js")"></script>

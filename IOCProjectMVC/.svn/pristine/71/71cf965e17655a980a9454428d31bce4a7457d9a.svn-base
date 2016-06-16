@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "BiologicalData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>BiologicalData</h2>
+
+
+<script src="@Url.Content("~/Scripts/BiologicalData.js")"></script>

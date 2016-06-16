@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "BiologicalData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @Scripts.Render("~/bundles/Highcharts");
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default MapPanels">
+            <div class="panel-heading">
+                Biological Data: abundance, distribution, special richness
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Map -->
+                        <div id="mapDiv">
+                            <!-- Homemap -->
+                            <div id="HomeButton"></div>
+
+                            <!-- Select Features Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicTransect_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Select Layer Panel</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Oceanographic Parameter</label>
+                                                <select class="form-control" name="OceanParameter" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Parameter</option>
+                                                    <option value="Temperature">Temperature</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="Month" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="Year" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                    <option value="2005">2005</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="ProfileDrawButton" disabled class="btn btn-success " onclick="CreateGraph()">Draw Profile</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+</div>
+
+<div class="row" id="rowGraphBiologicalData">
+    <div class="col-lg-12">
+        <!-- /.col-lg-12 -->
+        <div class="well" id="PieChartBiologicalData">
+        </div>
+    </div>
+    <!-- /row -->
+</div>
+
+<!-- scripts -->
+
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+<script src="@Url.Content("~/Scripts/BiologicalData.js")"></script>

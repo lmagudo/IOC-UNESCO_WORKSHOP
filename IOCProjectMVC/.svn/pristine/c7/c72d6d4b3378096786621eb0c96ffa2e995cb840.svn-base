@@ -1,0 +1,64 @@
+﻿/*Map ESRI*/
+#mapDiv {
+    /*border-style: solid;
+    border-color: green;*/
+}
+
+/*Logo ESRI*/
+.esriAttribution {
+    visibility:hidden;
+}
+
+/*Home Button ESRI*/
+#HomeButton {
+    position: absolute;
+    top: 95px;
+    left: 35px;
+    z-index: 50;
+}
+
+/*Overview Button ESRI*/
+.ovwButton {
+    right:15px;
+}
+
+/*Basemap Toggle ESRI*/
+#BasemapToggle {
+    position: absolute;
+    top: 140px;
+    left: 35px;
+    z-index: 50;
+}
+
+/*Coordinates Div*/
+#infocoord {
+    margin-left:10px;
+}
+
+/*Legend ESRI*/
+#legendPanel {
+    position: absolute;
+    top: 95px;
+    right: 35px;
+    z-index: 50;
+    display:none;
+    background:none;
+    outline:none;
+    border:none;
+}
+
+#legendDiv {
+    overflow-y:scroll;
+    height:250px;
+}
+
+/*Geodesic Panel*/
+#Geodesic_Panel {
+    position:absolute;
+    right:30px;
+    top:150px;
+    z-Index:999;
+    display:none
+}
+
+

@@ -1,0 +1,356 @@
+﻿
+@{
+    ViewBag.Title = "OceanographicAnomalies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default MapPanels">
+            <div class="panel-heading">
+                Oceanographic Anomaly Panel
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Map -->
+                        <div id="mapDiv">
+
+                            <!-- Action Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicAnomalyAction_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Select Action Panel</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <button id="ShowOneLayerButton" onclick="displaypanels(this.id)" class="btn btn-success ">Show one Layer</button>
+                                    <button id="CompareLayersButton" onclick="displaypanels(this.id)" class="btn btn-success ">Compare Two Layers</button>
+                                    <button id="CalculateAnomalyButton" onclick="displaypanels(this.id)" class="btn btn-success ">Calculate Anomaly</button>
+                                    <button id="ShowOrtoProyectButton" onclick="displaypanels(this.id)" class="btn btn-success ">Show Orto Proyection</button>
+                                </div>
+                            </div>
+
+                            <!-- One layer Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicAnomalyOneLayer_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Select Layer Panel</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Oceanographic Parameter</label>
+                                                <select class="form-control" name="OneParameter" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Choose a Parameter</option>
+                                                    <option value="Temperature">Temperature</option>
+                                                    <option value="Chlorophyll">Chlorophyll</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="Month" disabled lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="Year" disabled lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="SelectOneLayer" class="btn btn-success">OK</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Compare two layers Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicAnomalyTwoLayer_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Compare Parameters Panel</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Oceanographic Parameter</label>
+                                                <select class="form-control" name="CompareParameter" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Choose a Parameter</option>
+                                                    <option value="Temperature">Temperature</option>
+                                                    <option value="Chlorophyll">Chlorophyll</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="textcompareLayers">Layer One</label>
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="Monthone" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="Yearone" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="textcompareLayers">Layer Two</label>
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="Monthtwo" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="Yeartwo" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                </select>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="CompareLayers" class="btn btn-success " onclick="CompareLayers()">OK</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Calculate anomaly Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicAnomalyCalculate_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Calculate anomaly</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Oceanographic Parameter</label>
+                                                <select class="form-control" name="CompareParameter" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Choose a Parameter</option>
+                                                    <option value="Temperature">Temperature</option>
+                                                    <option value="Chlorophyll">Chlorophyll</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="textcompareLayers">Layer One</label>
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="MonthoneAnomaly" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="YearoneAnomaly" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="textcompareLayers">Layer Two</label>
+                                            <div class="col-lg-12">
+                                                <label>Month</label>
+                                                <select class="form-control" name="MonthtwoAnomaly" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Month</option>
+                                                    <option value="1">January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <label>Year</label>
+                                                <select class="form-control" name="YeartwoAnomaly" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Year</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="CalculateAnomaly" class="btn btn-success " onclick="CalculateAnomaly()">OK</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Show Orto Proyection Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="OceanographicAnomalyOrto_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Show Orto Projection</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Open Modal</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Show Orto Proyection Modal Panel -->
+
+                            <div id="myModal" class="modal fade" data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content" id="mymodalcontent">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+
+                            <!-- Legend -->
+                            <div class="panel panel-default" id="legendPanel">
+                                <div class="panel-body">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" aria-expanded="false" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Legend</a>
+                                                </h4>
+                                            </div>
+                                            <div style="height: 0px;" aria-expanded="false" id="collapseOne" class="panel-collapse collapse">
+                                                <div class="panel-body" id="legendDiv">
+                                                    <br><label id="legendtitle1" style="width: 100%; height: auto; font-size:larger"></label>
+                                                    <br>
+                                                    <br><img id="imaglegend1" style="width: 100%; height: auto" src="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">
+                                                    <a aria-expanded="false" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Metadata</a>
+                                                </h4>
+                                            </div>
+                                            <div style="height: 0px;" aria-expanded="false" id="collapseThree" class="panel-collapse collapse">
+                                                <div class="panel-body" id="metadataDiv">
+                                                    <strong id="Units1" style="font-size:larger"></strong>
+                                                    <br>
+                                                    <br><p id="InfoLayer"><b>Info Layer:</b><br></p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- .panel-body -->
+                            </div>
+
+
+                            <!-- /Swip Layers Div -->
+                            <div id="swipeDiv"></div>
+
+
+                            <!-- /Map -->
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+</div>
+
+<!-- scripts -->
+@*Cargamos las librerias que van a necesitar require y no son dojo*@
+<script src="@Url.Content("~/Scripts/config.js")"></script>
+@*Cargamos la librería de ESRI con Dojo*@
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+
+<script src="@Url.Content("~/Scripts/OceanographicAnomalies.js")"></script>

@@ -1,0 +1,113 @@
+﻿dojoConfig = {
+    has: {
+        "dojo-firebug": true
+    },
+    packages: [
+        { name: "datatables", location: "../bower_components/datatables/media/js/jquery.dataTables.min.js", main: "jquery.dataTables.min" }
+    ],
+
+    parseOnLoad: false,
+    foo: "bar",
+    async: false, aliases: [
+        ['$', '~/bower_components/jquery/dist/jquery.min.js']
+    ]
+};
+
+var PropiedadesOwnData = new Object();
+PropiedadesOwnData.VariablesGlobales = ['map', 'startExtent', 'colXselected', 'colYselected'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesOwnData.VariablesGlobales, function (index, value) {
+        PropiedadesOwnData[value] = undefined;
+    });
+}
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, BasemapToggle, OverviewMap, Legend, Extent,
+    GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesOwnData.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesOwnData.map = new Map("mapDiv", {
+        extent: PropiedadesOwnData.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesOwnData.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesOwnData.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesOwnData.startExtent.xmin - buffer, PropiedadesOwnData.startExtent.ymin - buffer, PropiedadesOwnData.startExtent.xmax + buffer, PropiedadesOwnData.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+    //#endregion
+
+});
+//#endregion
+
+
+//#region Selection and queries
+//Onchange event select Col X
+$("select[name='columnX']").on('change', function () {
+    PropiedadesOwnData.colXselected = $(this).find("option:selected").val();
+    PropiedadesOwnData.colYselected = $("select[name='columnY']").find("option:selected").val();
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+});
+
+//Onchange event select Col Y
+$("select[name='columnY']").on('change', function () {
+    PropiedadesOwnData.colYselected = $(this).find("option:selected").val();
+    PropiedadesOwnData.colXselected = $("select[name='columnX']").find("option:selected").val();
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+});
+//#endregion
+
+//#region Graph
+function CreateGraph() {
+    var serieX = [];
+    var serieY = [];
+    $.each(PropiedadesOwnData.map.getLayer('csvLayer').graphics, function (index, value) {
+        serieX.push(value.attributes[PropiedadesOwnData.colXselected]);
+        serieY.push(value.attributes[PropiedadesOwnData.colYselected]);
+    });
+    console.log(serieX);
+    console.log(serieY);
+    //var OwnDataChart = $('#graphOwnData').highcharts({});
+    $('#rowGraphOwnData').show();
+}
+//#endregion

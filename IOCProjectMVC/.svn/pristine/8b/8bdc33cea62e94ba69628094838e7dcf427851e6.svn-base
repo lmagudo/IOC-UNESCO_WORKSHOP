@@ -1,0 +1,88 @@
+﻿
+var PropiedadesBathyTransects = new Object();
+PropiedadesBathyTransects.VariablesGlobales = ['map', 'startExtent', 'unitSelected'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesBathyTransects.VariablesGlobales, function (index, value) {
+        PropiedadesBathyTransects[value] = undefined;
+    });
+}
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+//#region Combox
+PropiedadesBathyTransects.Units = [
+    { id: "esriNauticalMiles", text: "Nautical Miles" },
+    { id: "esriKilometers", text: "Kilometers" },
+    { id: "esriMiles", text: "Miles" },
+    { id: "esriMeters", text: "Meters" },
+    { id: "esriYards", text: "Yards" }
+];
+
+require(['select2'], function () {
+    $("[data-html-id='unitsSelect']").select2({
+        placeholder: "Select a Unit",
+        data: PropiedadesBathyTransects.Units,
+        width: '100%'
+    }).on("change", function (e) {
+        console.log(e);
+        PropiedadesBathyTransects.unitSelected = e.added.id;
+    });
+});
+//#endregion
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, BasemapToggle, OverviewMap, Legend, Extent,
+    GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesBathyTransects.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesBathyTransects.map = new Map("mapDiv", {
+        extent: PropiedadesBathyTransects.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesBathyTransects.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesBathyTransects.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesBathyTransects.startExtent.xmin - buffer, PropiedadesBathyTransects.startExtent.ymin - buffer, PropiedadesBathyTransects.startExtent.xmax + buffer, PropiedadesBathyTransects.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+    //#endregion
+
+});
+//#endregion

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout_Login.cshtml";
+    
+}
+
+<html>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-center col-md-offset-3" id="titulo_login">
+                <img src="~/Img/unesco.png" id="imagen_logo_login" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Enter username and password</h3>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Login", "AccountManager", FormMethod.Post))
+                        {
+                            <form role="form" class="login">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <input id="input_mail" class="form-control" placeholder="E-mail" name="email" type="text" autofocus value="@Request.Params["email"]">
+                                    </div>
+                                    <div class="form-group">
+                                        <input id="input_passhass" class="form-control" placeholder="Password" name="pass" type="password" value="">
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="remember" type="checkbox" value="Remember Me">Remember?
+                                        </label>
+                                        <input name="returnView" value="@Request.Params["ReturnUrl"]" hidden />
+                                    </div>
+                                    <!-- Change this to a button or input when using this as a form -->
+                                    <input class="btn btn-lg btn-success btn-block" type=submit id=cmdSubmit value=Enter>
+                                    @*@<a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>*@
+                                    @*@Html.ActionLink("Login", "ValidateLogin", "AccountManager", new loginmodel { email = input_mail, passhas = input_passhass, returnView= "Map" }, new { @class = "btn btn-lg btn-success btn-block" })*@
+
+
+                                </fieldset>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

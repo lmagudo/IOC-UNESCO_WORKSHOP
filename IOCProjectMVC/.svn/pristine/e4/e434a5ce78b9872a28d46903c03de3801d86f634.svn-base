@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "UpwellingIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    @Scripts.Render("~/bundles/Highcharts");
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Upwelling Index Monthly Set</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Upwelling Index Selector Panel
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="severalgroups">
+                            <form role="form">
+                                <div class="form-group">
+                                    <select class="form-control" name="source_list" lang="es" xml:lang="es">
+                                        <option value="" selected disabled>Please select a Source</option>
+                                        <option value="HFNMOC">FNMOC Historical</option>
+                                        <option value="HMeteogalicia">Meteogalicia Historical</option>
+                                        <option value="HBaixas">Baixas FNMOC</option>
+                                        <option value="HAltas">Altas FNMOC</option>
+                                        <option value="HPenas">Penas FNMOC</option>
+                                        <option value="HBilbao">Bilbao FNMOC</option>
+                                        <option value="HAveiro">Aveiro FNMOC</option>
+                                        <option value="HFigueira">Figueira da Foz FNMOC</option>
+                                        <option value="HCRoca">Cabo Roca FNMOC</option>
+                                        <option value="HVicente">Cabo Vicente FNMOC</option>
+                                        <option value="HSines">Sines FNMOC</option>
+                                        <option value="HAlgarve">Algarve FNMOC</option>
+                                        <option value="HCadiz">Cadiz FNMOC</option>
+                                        <option value="HCasablanca">Casablanca FNMOC</option>
+                                        <option value="HCanarias">Canarias FNMOC</option>
+                                        <option value="HMauritania">Mauritania FNMOC</option>
+                                        <option value="MBaixas">Rías Baixas</option>
+                                        <option value="MAltas">Rias Altas</option>
+                                        <option value="MCantabrico">Cantábrico Central</option>
+                                        <option value="MFigueira">Figueira</option>
+                                        <option value="MOporto">Oporto</option>
+                                        <option value="MCRoca">Roca Cape</option>
+                                        <option value="MCVicente">San Vicente Cape</option>
+                                        <option value="MSantander">Santander</option>
+                                        <option value="BVilano">Vilano Buoy</option>
+                                        <option value="BSilleiro">Silleiro Buoy</option>
+                                        <option value="BEstaca">Estaca Buoy</option>
+                                        <option value="BPenas">Peñas Buoy</option>
+                                        <option value="BBilbao">Bilbao Buoy</option>
+                                        <option value="BSantander">Santander Buoy</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    @*<label>Year</label>*@
+                                    <select class="form-control" name="year_list" lang="es" xml:lang="es">
+                                        <option value="" selected disabled>Please select Year</option>
+                                        @{
+                                            Int32 actualYear = Int32.Parse(DateTime.Now.Year.ToString());
+                                            for (var i = actualYear; i > 1966; i--)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        }
+                                    </select>
+                                    
+                                </div>                                
+                            </form>
+                            <button id="InsertButtonUpwelling" disabled class="btn btn-success ButtonUpwelling" onclick="addSerietoGraph()">Insert</button>
+                            <button id="RemoveButtonUpwelling" disabled class="btn btn-danger ButtonUpwelling" onclick="removeSerietoGraph()">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        <div class="well" id="graphicUpwelling"></div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">                
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table data-html-id="dataTableUpwelling" class="table table-striped table-bordered table-hover" width="100%"></table>
+                </div> 
+            </div>            
+        </div>
+        <!-- /.col-lg-12 -->
+<!-- /.row -->
+<script src="@Url.Content("~/Scripts/UpwellingIndex.js")"></script>

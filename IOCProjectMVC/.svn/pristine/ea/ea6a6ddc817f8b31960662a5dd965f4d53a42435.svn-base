@@ -1,0 +1,14 @@
+﻿
+$.ajax({
+    type: "POST",
+    url: "~/App_Data/HFNMOC_mensual.xml",
+    dataType: "xsl",
+    success: function (xml) {
+        console.log('hecho');
+        console.log(xml);
+    },
+    //other code
+    error: function (error) {
+        console.log(error);
+    }
+});

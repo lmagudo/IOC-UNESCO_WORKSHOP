@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "BathymetricTransects";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default MapPanels">
+            <div class="panel-heading">
+                Bathymetric Transects Panel
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Map -->
+                        <div id="mapDiv">
+
+                            <!-- Layers Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="BathymetricTransect_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Digitize a transect</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Select unit measure:</label>
+                                                <div data-html-id="unitsSelect"></div>
+                                                @*<select class="form-control" name="unitsSelect" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Unit</option>
+                                                    <option value="esriNauticalMiles">Nautical Miles</option>
+                                                    <option value="esriMiles">Miles</option>
+                                                    <option value="esriKilometers">Kilometers</option>
+                                                    <option value="esriMeters">Meters</option>
+                                                    <option value="esriYards">Yards</option>
+                                                    <option value="esriFeet">Feet</option>
+                                                </select>*@
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="ProfileDrawButton" disabled class="btn btn-success">Draw Profile</button>
+                                            <button id="FreeHandDrawButton" disabled class="btn btn-success">Free Hand Profile</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Map -->
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+</div>
+
+<div class="row" id="rowGraphBathymetricTransect">
+    <div class="col-lg-12">
+        <!-- /.col-lg-12 -->
+        <div class="well" id="GraphBathymetricTransect">
+        </div>
+    </div>
+    <!-- /row -->
+</div>
+
+@*Cargamos las librerias que van a necesitar require y no son dojo*@
+<script src="@Url.Content("~/Scripts/config.js")"></script>
+@*Cargamos la librería de ESRI con Dojo*@
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+<script src="@Url.Content("~/Scripts/BathymetricTransects.js")"></script>

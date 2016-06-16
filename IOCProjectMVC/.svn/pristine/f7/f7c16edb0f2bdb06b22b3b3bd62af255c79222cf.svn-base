@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "PrecipitationDischarges";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PrecipitationDischarges</h2>
+
+<script src="@Url.Content("~/Scripts/PrecipitationDischarges.js")"></script>

@@ -1,0 +1,167 @@
+﻿var PropiedadesUpwelling = new Object();
+PropiedadesUpwelling.VariablesGlobales = ['Series', 'serie1', 'serie2', 'UpwellingChart', 'sourceselected', 'yearselected', 'UpwellingTable'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesUpwelling.VariablesGlobales, function (index, value) {
+        PropiedadesUpwelling[value] = undefined;
+    });
+}
+
+//Onchange event select Source
+$("select[name='source_list']").on('change', function () {
+    PropiedadesUpwelling.sourceselected = $(this).find("option:selected").val();
+    PropiedadesUpwelling.yearselected = $("select[name='year_list']").find("option:selected").val();
+    (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#InsertButtonUpwelling").prop("disabled", false) : $("#InsertButtonUpwelling").prop("disabled", true);
+});
+
+//Onchange event select Year
+$("select[name='year_list']").on('change', function () {
+    PropiedadesUpwelling.yearselected = $(this).find("option:selected").val();
+    PropiedadesUpwelling.sourceselected = $("select[name='source_list']").find("option:selected").val();
+    (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#InsertButtonUpwelling").prop("disabled", false) : $("#InsertButtonUpwelling").prop("disabled", true);
+});
+
+$.ajax({
+    type: "POST",
+    url: "~/App_Data/HFNMOC_mensual.xml",
+    dataType: "json",
+    success: function (xml) {
+        console.log('hecho');
+        console.log(xml);
+        xmlDoc = $.parseXML(xml),
+        $xml = $(xmlDoc)
+        console.log($xml)
+    },
+    //other code
+    error: function (error) {
+        console.log(error);
+    }
+});
+PropiedadesUpwelling.serie1 = {
+    name: 'HFNMOC 2016',
+    data: [-978.573, 228.738, 386.888, -267.686, -15.522, 491.513, undefined, undefined, undefined, undefined, undefined, undefined],
+    color: "blue"
+}
+PropiedadesUpwelling.serie2 = {
+    name: 'HMeteogalicia 2015',
+    data: [198.801, 841.263, 892.858, 297.484, 6.141, 1193.723, 95.628, 225.597, 389.532, -200.625, -578.589, -3488.552],
+    color: "green"
+}
+
+PropiedadesUpwelling.Series = [];
+
+
+
+function addSerietoGraph() {
+    //PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie1);
+    $("#graphicUpwelling").show();
+    (PropiedadesUpwelling.Series.length > 0) ? PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie1) : PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie2);
+    prepareTable();
+    var UpwellingChart = $('#graphicUpwelling').highcharts({
+
+        title: null,
+
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'UI(m3*s-1*km-1)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function () {
+                return this.series.name + ' ' + this.x + 
+                    ': <b>' + this.y + '</b>' + ' UI(m3*s-1*km-1)';
+            },
+            //valueSuffix: 'UI(m3*s-1*km-1)'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: PropiedadesUpwelling.Series
+    });
+
+    $("#graphicUpwelling").show();
+    PropiedadesUpwelling.UpwellingChart = UpwellingChart.highcharts();
+}
+
+function prepareTable(data) {
+    var EsquemaColumnas,
+        data,
+        arraymonths;
+    EsquemaColumnas = [];
+
+    arraymonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var itemmonth = {}
+    itemmonth['title'] = 'Month';
+    itemmonth['data'] = 'Month';
+    itemmonth['width'] = '20%';
+
+    EsquemaColumnas.push(itemmonth);   
+
+    $.each(PropiedadesUpwelling.Series, function (index, value) {
+        var item = {};
+        item['title'] = value.name;
+        item['data'] = value.name;
+        item['width'] = '20%';
+        EsquemaColumnas.push(item);
+        
+    });
+
+    data = [];
+    $.each(arraymonths, function (index, value) {
+        var item = {};
+        item['Month'] = value;
+        for (var i = 0; i < PropiedadesUpwelling.Series.length; i++) {
+            if (PropiedadesUpwelling.Series[i].data[index] == undefined) {
+                item[PropiedadesUpwelling.Series[i].name] = NaN;
+            }
+            else {
+                item[PropiedadesUpwelling.Series[i].name] = PropiedadesUpwelling.Series[i].data[index];
+            }
+            
+        }
+        data.push(item);
+    });
+    createTable(EsquemaColumnas, data);
+}
+
+function createTable(EsquemaColumnas, data) {
+    console.log(EsquemaColumnas);
+    console.log(data);
+    if (PropiedadesUpwelling.UpwellingTable != undefined) {
+        PropiedadesUpwelling.UpwellingTable.destroy();
+        PropiedadesUpwelling.UpwellingnodoTabla.empty(); // empty in case the columns change
+    }
+    PropiedadesUpwelling.UpwellingnodoTabla = $("[data-html-id='dataTableUpwelling']");
+    //nodoTabla.parent().addClass("estiloTabla");
+    PropiedadesUpwelling.UpwellingTable = PropiedadesUpwelling.UpwellingnodoTabla.DataTable({
+        data: data,
+        "bPaginate": false,
+        //"dom": "<'row'<'col-md-6'l><'col-md-6'f>><'row'<'col-md-6'B><'col-md-6'p>><'row'<'col-md-12't>><'row'<'col-md-12'i>>",
+        'aoColumns': EsquemaColumnas,
+        "language": {
+            "url": "  http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+        }
+
+    });
+
+    $("#tableUpwelling").show();
+}
+
+function removeSerietoGraph() {
+    console.log(PropiedadesUpwelling.sourceselected, PropiedadesUpwelling.yearselected);
+}

@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "SpatioTemporalViewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SpatioTemporalViewer</h2>
+
+<script src="@Url.Content("~/Scripts/SpatioTemporalViewer.js")"></script>

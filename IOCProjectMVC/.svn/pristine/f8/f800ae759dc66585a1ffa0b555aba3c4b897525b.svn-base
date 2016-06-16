@@ -1,0 +1,206 @@
+﻿var PropiedadesOceanAnomalies = new Object();
+PropiedadesOceanAnomalies.VariablesGlobales = ['map', 'startExtent', 'tb', 'sourceSelected', 'kindongSelected', 'namespeciesSelected'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesOceanAnomalies.VariablesGlobales, function (index, value) {
+        PropiedadesOceanAnomalies[value] = undefined;
+    });
+}
+
+//Muestro el botón de limpiar entidades
+$('#ClearButton').show()
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+
+//#region Action Panel
+function displaypanels(idbutton) {
+    
+    switch (idbutton) {
+        case 'ShowOneLayerButton':
+            showhidePanel('OceanographicAnomalyOneLayer_Panel');
+            break;
+        case 'CompareLayersButton':
+            showhidePanel('OceanographicAnomalyTwoLayer_Panel');
+            break;
+        case 'CalculateAnomalyButton':
+            showhidePanel('OceanographicAnomalyCalculate_Panel');
+            break;
+        case 'ShowOrtoProyectButton':
+            showhidePanel('OceanographicAnomalyOrto_Panel');
+            break;
+    }
+}
+
+function showhidePanel(panelId) {
+    ($('#' + panelId).css('display') == 'none') ? $('#' + panelId).show() : $('#' + panelId).hide();
+    ShowHideActionPanel();
+}
+
+function ShowHideActionPanel() {
+    ($('#OceanographicAnomalyAction_Panel').css('display') == 'none') ? $('#OceanographicAnomalyAction_Panel').show() : $('#OceanographicAnomalyAction_Panel').hide();
+}
+
+//#endregion
+
+
+//#region Map
+require([
+    "esri/map",
+    "esri/geometry/Extent",
+    "esri/arcgis/utils",
+    "esri/toolbars/navigation",
+    "esri/dijit/HomeButton",
+    "esri/dijit/Legend",
+    "esri/geometry/webMercatorUtils",
+    "esri/layers/ArcGISTiledMapServiceLayer",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
+    "esri/layers/DynamicMapServiceLayer",
+    "esri/dijit/LayerSwipe",
+    "dojo/on",
+    "dojo/dom",
+    "dojo/dom-construct",
+    "dojo/parser",
+    "dojo/_base/array",
+    "dojo/io-query",
+    "dojo/_base/declare",
+    "dijit/layout/AccordionContainer",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/ContentPane",
+    "dojo/domReady!"
+], function (Map, Extent, utils, Navigation, HomeButton, Legend, webMercatorUtils,
+    ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, DynamicMapServiceLayer, LayerSwipe,
+    on, dom, domConstruct, parser, arrayUtils, ioquery, declare
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesOceanAnomalies.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesOceanAnomalies.map = new Map("mapDiv", {
+        extent: PropiedadesOceanAnomalies.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //Home Button Dijit
+    PropiedadesOceanAnomalies.home = new HomeButton({
+        map: PropiedadesOceanAnomalies.map
+    }, "HomeButton");
+    PropiedadesOceanAnomalies.home.startup();
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesOceanAnomalies.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesOceanAnomalies.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesOceanAnomalies.startExtent.xmin - buffer, PropiedadesOceanAnomalies.startExtent.ymin - buffer, PropiedadesOceanAnomalies.startExtent.xmax + buffer, PropiedadesOceanAnomalies.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+
+    //#region WMSlayers
+    declare("my.nexradWMSLayer1", DynamicMapServiceLayer, {
+        constructor: function () {
+            console.log(layer1);
+            this.initialExtent = this.fullExtent = new Extent({
+                xmin: -180,
+                ymin: -90,
+                xmax: 180,
+                ymax: 90,
+                spatialReference: {
+                    wkid: 4326
+                }
+            });
+            this.spatialReference = new esri.SpatialReference({
+                wkid: 4326
+            });
+            this.loaded = true;
+            this.onLoad(this);
+        },
+
+        getImageUrl: function (extent, width, height, callback) {
+            var mp = webMercatorUtils.webMercatorToGeographic(extent);
+            var params = {
+                request: "GetMap",
+                transparent: true,
+                format: "image/png",
+                transparent: "true",
+                bgcolor: "ffffff",
+                version: "1.3.0",
+                layers: layer1,
+                styles: "default,default",
+                exceptions: "application/vnd.ogc.se_xml",
+                //changing values
+                bbox: mp.xmin + "," + mp.ymin + "," + mp.xmax + "," + mp.ymax,
+                srs: "EPSG:" + mp.spatialReference.wkid,
+                width: width,
+                height: height
+            };
+
+            console.log(urlwms + ioquery.objectToQuery(params));
+            callback(urlwms + ioquery.objectToQuery(params));
+        }
+    });
+
+    declare("my.nexradWMSLayer2", DynamicMapServiceLayer, {
+        constructor: function () {
+            console.log(layer2);
+            this.initialExtent = this.fullExtent = new Extent({
+                xmin: -180,
+                ymin: -90,
+                xmax: 180,
+                ymax: 90,
+                spatialReference: {
+                    wkid: 4326
+                }
+            });
+            this.spatialReference = new esri.SpatialReference({
+                wkid: 4326
+            });
+            this.loaded = true;
+            this.onLoad(this);
+        },
+
+        getImageUrl: function (extent, width, height, callback) {
+            var mp = webMercatorUtils.webMercatorToGeographic(extent);
+            console.log(mp);
+            var params = {
+                request: "GetMap",
+                transparent: true,
+                format: "image/png",
+                transparent: "true",
+                bgcolor: "ffffff",
+                version: "1.3.0",
+                layers: layer2,
+                styles: "default,default",
+                exceptions: "application/vnd.ogc.se_xml",
+                //changing values
+                bbox: mp.xmin + "," + mp.ymin + "," + mp.xmax + "," + mp.ymax,
+                srs: "EPSG:" + mp.spatialReference.wkid,
+                width: width,
+                height: height
+            };
+
+            console.log(urlwms + ioquery.objectToQuery(params));
+            callback(urlwms + ioquery.objectToQuery(params));
+        }
+    });
+    //#endregion
+
+    //#region Combos
+    
+    //#endregion
+
+
+
+});

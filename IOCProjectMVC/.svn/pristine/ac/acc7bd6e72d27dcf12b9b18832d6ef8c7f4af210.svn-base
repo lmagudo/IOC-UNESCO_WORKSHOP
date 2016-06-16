@@ -1,0 +1,40 @@
+﻿
+/*Upwelling Index Graphic*/
+#graphicUpwelling {
+   display:none;
+}
+#tableUpwelling {
+   display:none;
+}
+
+.ButtonUpwelling {
+    float:left;
+    margin-left:10px
+}
+
+/*Own Data Graphic*/
+#rowGraphOwnData {
+    display:none;
+}
+
+.unitsGraphOwnData {
+    margin-top:5px;
+}
+
+/*Biological Data Graphic*/
+#rowGraphBiologicalData {
+    display:none;
+}
+
+#rowTablesBiologicalData {
+    display:none;
+}
+
+/*Biological Data Index Table*/
+#datatableBioIndex {
+    display:none;
+}
+
+#tableSourceUpwelling {
+    display:none;
+}

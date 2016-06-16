@@ -1,0 +1,5 @@
+﻿
+/*Upwelling Index Graphic*/
+#graphicUpwelling {
+   display:none;
+}

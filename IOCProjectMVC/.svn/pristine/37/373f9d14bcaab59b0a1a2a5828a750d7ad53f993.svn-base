@@ -1,0 +1,300 @@
+﻿var PropiedadesBiological = new Object();
+PropiedadesBiological.VariablesGlobales = ['map', 'startExtent', 'tb', 'sourceSelected', 'kindongSelected', 'namespeciesSelected'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesBiological.VariablesGlobales, function (index, value) {
+        PropiedadesBiological[value] = undefined;
+    });
+}
+
+//Muestro el botón de limpiar entidades
+$('#ClearButton').show()
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+
+
+//Creo los combos con select2
+
+PropiedadesBiological.Sources = [{ id: "IEO", text: "IEO" }, { id: "OBIS", text: "OBIS" }, { id: "BOTH", text: "IEO & OBIS" }];
+PropiedadesBiological.Kingdoms = [];
+PropiedadesBiological.namespecies = [];
+
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/HomeButton",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/FeatureLayer",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "esri/toolbars/draw",
+    "esri/tasks/query",
+    "esri/tasks/QueryTask",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, HomeButton, BasemapToggle, OverviewMap, Legend, Extent,
+    FeatureLayer, GraphicsLayer, webMercatorUtils, Draw, Query, QueryTask,
+    array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesBiological.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesBiological.map = new Map("mapDiv", {
+        extent: PropiedadesBiological.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //Home Button Dijit
+    PropiedadesBiological.home = new HomeButton({
+        map: PropiedadesBiological.map
+    }, "HomeButton");
+    PropiedadesBiological.home.startup();
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesBiological.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesBiological.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesBiological.startExtent.xmin - buffer, PropiedadesBiological.startExtent.ymin - buffer, PropiedadesBiological.startExtent.xmax + buffer, PropiedadesBiological.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+
+    //#region layers
+    PropiedadesBiological.OBISLayer = new FeatureLayer("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/OBIS_BioData/MapServer/0", {
+        id: "OBIS",
+        mode: FeatureLayer.MODE_ONDEMAND,
+        outFields: ["id", "sname", "datecollected", "depth", "temperature", "salinity", "nitrate", "oxygen", "phosphate", "Kingdom"],
+        visible: false
+    });
+
+    PropiedadesBiological.map.addLayers([PropiedadesBiological.OBISLayer]);
+    //#endregion
+
+    //#region Combos
+
+    //rellenamos el combo Kingdom
+    fillComboKingdom();
+    //rellenamos el combo Especies
+    fillComboSpecie();
+
+    //Evento cambio valor en combo Source
+    $("select[name='Source']").on('change', function () {
+        if ($(this).find("option:selected").val() != "") {
+            if ($(this).find("option:selected").val() == "OBIS") {
+                $("select[name='Kingdom']").prop("disabled", false);
+            }
+            $("select[name='Namespecies']").prop("disabled", false);
+            $("#SelectBioButton").prop("disabled", false);
+            $("#PolygonDrawButton").prop("disabled", false);
+        }
+        else {
+            $("select[name='Kingdom']").prop("disabled", true);
+            $("select[name='Namespecies']").prop("disabled", true);
+            $("#SelectBioButton").prop("disabled", true);
+            $("#PolygonDrawButton").prop("disabled", true);
+        }
+    });
+
+    //Evento cambio valor en combo Kingdom
+    $("select[name='Kingdom']").on('change', function () {
+        fillComboSpecie();
+    });
+
+    //Función que rellena el combo Kingdom
+    function fillComboKingdom() {       
+        var queryTask = new QueryTask("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/OBIS_BioData/MapServer/0");
+        var querykingdom = new Query();
+        querykingdom.returnGeometry = false;
+        querykingdom.returnDistinctValues = true;
+        querykingdom.outFields = ["Kingdom"];
+        querykingdom.where = "1=1"
+        queryTask.execute(querykingdom, function GetResults(result) {
+            var combokingdom = $("select[name='Kingdom']");
+            var arraykingdoms = [];
+            $.each(result.features, function (index, value) {
+                arraykingdoms.push(value.attributes.Kingdom);
+            });
+            arraykingdoms.sort();
+            $.each(arraykingdoms, function (index, value) {
+                combokingdom.append('<option value="' + value + '">' + value + '</option>');
+            })
+        });
+    }
+
+    function fillComboSpecie() {
+        var kingdomselected,
+            queryTask,
+            queryspecie;
+        kingdomselected = $("select[name='Kingdom']").find("option:selected").val();
+        queryTask = new QueryTask("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/OBIS_BioData/MapServer/0");
+        queryspecie = new Query();
+        queryspecie.returnGeometry = false;
+        queryspecie.returnDistinctValues = true;
+        queryspecie.outFields = ["tname"];
+        (kingdomselected == "") ? queryspecie.where = "1=1" : queryspecie.where = "Kingdom = '" + kingdomselected + "'";
+        queryTask.execute(queryspecie, function GetResults(result) {
+            var combospecie = $("select[name='Namespecies']");
+            combospecie.empty();
+            combospecie.append('<option value=""selected disabled>Select a specie</option>');
+            var arrayespecies = [];
+            $.each(result.features, function (index, value) {
+                arrayespecies.push(value.attributes.tname);
+            });
+            arrayespecies.sort();
+            $.each(arrayespecies, function (index, value) {
+                combospecie.append('<option value="' + value + '">' + value + '</option>');
+            })
+        });        
+    }
+
+    //#endregion
+
+
+    //#region Draw
+
+    PropiedadesBiological.tb = new Draw(PropiedadesBiological.map);
+    PropiedadesBiological.tb.on("draw-end", DrawResults);
+
+    //#endregion
+
+});
+
+function DrawPolygon() {
+    PropiedadesBiological.map.graphics.clear();
+    PropiedadesBiological.tb.activate(esri.toolbars.Draw.POLYGON);
+}
+
+//Función que maneja el resultado del dibujo
+function DrawResults(evt) {
+    require([
+      "esri/Color",
+      "esri/graphic",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/symbols/SimpleFillSymbol",
+      "esri/tasks/query"
+    ],
+      function (Color, Graphic, SimpleLineSymbol, SimpleFillSymbol, Query) {
+          var geometry,
+              symbol,
+              source,
+              kingdom,
+              namespecies,
+              myquery;
+
+          PropiedadesBiological.tb.deactivate();
+
+          // add the drawn graphic to the map
+          geometry = evt.geometry;
+          symbol = new SimpleFillSymbol(
+            SimpleFillSymbol.STYLE_SOLID,
+            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 255]), 2),
+            new Color([0, 0, 255, 0.5]));
+
+          PropiedadesBiological.graphicarea = new Graphic(geometry, symbol);
+          PropiedadesBiological.map.graphics.add(PropiedadesBiological.graphicarea);
+
+          //#region Query
+          source = $("select[name='Source']").find("option:selected").val();
+          kingdom = $("select[name='Kingdom']").find("option:selected").val();
+          namespecies = $("select[name='Namespecies']").find("option:selected").val();
+
+          switch (source) {
+              case "IEO":
+                  myquery = new Query();
+                  myquery.geometry = geometry;
+                  break;
+              case "OBIS":
+                  myquery = new Query();
+                  myquery.geometry = geometry;
+                  myquery.where = "Kingdom = '" + kingdom + "' AND sname = '" + namespecies + "'";
+                  PropiedadesBiological.OBISLayer.queryFeatures(myquery, selectInBuffer);
+                  break;
+              case "BOTH":
+                  myqueryOBIS = new Query();
+                  myqueryOBIS.geometry = geometry;
+                  PropiedadesBiological.OBISLayer.queryFeatures(myqueryOBIS, selectInBuffer);
+          }
+
+          //#endregion
+
+      });
+}
+
+function selectInBuffer(response) {
+    require([
+        "esri/tasks/query",
+        "esri/layers/FeatureLayer"
+    ],
+     function (Query, FeatureLayer) {
+         var feature;
+         var features = response.features;
+         var inBuffer = [];
+         //filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
+         for (var i = 0; i < features.length; i++) {
+             feature = features[i];
+             
+             if (PropiedadesBiological.graphicarea.geometry.contains(feature.geometry)) {
+                 inBuffer.push(feature.attributes[PropiedadesBiological.OBISLayer.objectIdField]);
+             }
+         }
+
+         var query = new Query();
+         query.objectIds = inBuffer;
+         //use a fast objectIds selection query (should not need to go to the server)
+         PropiedadesBiological.OBISLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, function (results) {
+             PropiedadesBiological.OBISLayer.setVisibility(true);
+         });
+     });    
+}
+
+function selectInDraw(result) {
+    console.log(result);
+    var myfeats = result.features;
+}
+
+//#endregion
+
+
+
+//#region Graphs Biological Data
+
+//#endregion
+
+
+//#region Tables Biological Data
+
+//#endregion
+
+//#region Clear
+function clearGraphics() {
+    (PropiedadesBiological.map.getLayer('OBIS')) ? PropiedadesBiological.map.removeLayer(PropiedadesBiological.map.getLayer('OBIS')) : "";
+    (PropiedadesBiological.map.getLayer('IEO')) ? PropiedadesBiological.map.removeLayer(PropiedadesBiological.map.getLayer('IEO')) : "";
+    PropiedadesBiological.map.clearGraphics();
+}
+//#endregion

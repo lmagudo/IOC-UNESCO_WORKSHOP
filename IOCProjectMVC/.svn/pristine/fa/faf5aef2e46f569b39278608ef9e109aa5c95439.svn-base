@@ -1,0 +1,167 @@
+﻿dojoConfig = {
+    has: {
+        "dojo-firebug": true
+    },
+    packages: [
+        { name: "datatables", location: "../bower_components/datatables/media/js/jquery.dataTables.min.js", main: "jquery.dataTables.min" }
+    ],
+
+    parseOnLoad: false,
+    foo: "bar",
+    async: false, aliases: [
+        ['$', '~/bower_components/jquery/dist/jquery.min.js']
+    ]
+};
+
+var PropiedadesBiological = new Object();
+PropiedadesBiological.VariablesGlobales = ['map', 'startExtent', 'tb'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesBiological.VariablesGlobales, function (index, value) {
+        PropiedadesBiological[value] = undefined;
+    });
+}
+
+//Muestro el botón de limpiar entidades
+$('#ClearButton').show()
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/HomeButton",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "esri/toolbars/draw",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, HomeButton, BasemapToggle, OverviewMap, Legend, Extent,
+    GraphicsLayer, webMercatorUtils, Draw, array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesBiological.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesBiological.map = new Map("mapDiv", {
+        extent: PropiedadesBiological.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //Home Button Dijit
+    PropiedadesBiological.home = new HomeButton({
+        map: PropiedadesBiological.map
+    }, "HomeButton");
+    PropiedadesBiological.home.startup();
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesBiological.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesBiological.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesBiological.startExtent.xmin - buffer, PropiedadesBiological.startExtent.ymin - buffer, PropiedadesBiological.startExtent.xmax + buffer, PropiedadesBiological.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+    //#endregion
+
+    //#region Combos
+    $("select[name='Source']").on('change', function () {
+        if ($(this).find("option:selected").val() != "") {
+            $("select[name='Kingdom']").prop("disabled", false);
+            $("select[name='Namespecies']").prop("disabled", false);
+            $("#SelectBioButton").prop("disabled", false);
+            $("#PolygonDrawButton").prop("disabled", false);
+        }
+        else {
+            $("select[name='Kingdom']").prop("disabled", true);
+            $("select[name='Namespecies']").prop("disabled", true);
+            $("#SelectBioButton").prop("disabled", true);
+            $("#PolygonDrawButton").prop("disabled", true);
+        }
+    });
+    //#endregion
+
+
+    //#region Queries
+
+    //Función para dibujar
+    $('#PolygonDrawButton').click(DrawPolygon());
+
+    function DrawPolygon() {
+        PropiedadesBiological.tb = new esri.toolbars.Draw(PropiedadesBiological.map);
+        (PropiedadesBiological.tb != undefined) ? PropiedadesBiological.tb.activate : PropiedadesBiological.tb.on("draw-end", DrawResults);        
+        PropiedadesBiological.tb.activate(esri.toolbars.Draw.POLYGON);
+    }
+
+    //Función que maneja el resultado del dibujo
+    function DrawResults(evt) {
+        require([
+          "esri/Color",
+          "esri/graphic",
+          "esri/symbols/SimpleLineSymbol",
+          "esri/symbols/SimpleFillSymbol"
+        ],
+          function (Color, Graphic, SimpleLineSymbol, SimpleFillSymbol) {
+
+              PropiedadesBiological.tb.deactivate();
+
+              // add the drawn graphic to the map
+              var geometry = evt.geometry;
+              var symbol = new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 255]), 2),
+                new Color([0, 0, 255, 0.5]));
+
+              var graphicarea = new Graphic(geometry, symbol);
+              PropiedadesBiological.map.graphics.add(graphicarea);
+
+          })
+    }
+
+
+    //#endregion
+
+});
+//#endregion
+
+
+
+//#region Graphs Biological Data
+
+//#endregion
+
+
+//#region Tables Biological Data
+
+//#endregion
+
+//#region Clear
+function clearGraphics() {
+
+}
+//#endregion
