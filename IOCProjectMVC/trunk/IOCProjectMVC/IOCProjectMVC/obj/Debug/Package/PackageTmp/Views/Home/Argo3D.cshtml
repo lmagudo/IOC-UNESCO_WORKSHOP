@@ -15,6 +15,37 @@
                         <!-- Map -->
                         <div id="mapDiv">
 
+                            <!-- Layers Select Panel -->
+                            <div class="draggablePanel panel panel-info" id="ArgoSelect_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Argo Select Panel</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Select Argo Code:</label>
+                                                <select class="form-control" id="ArgoSelect">
+                                                    <option value="" selected disabled>Select a Code</option>
+                                                    <option value="1901204">1901204</option>
+                                                    <option value="1901205">1901205</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="GetInfo" class="btn btn-success">Get Info</button>
+                                            <button id="Download" class="btn btn-success">Download Data</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Map -->
                         </div>
                         <!-- /.col-lg-12 -->
                     </div>
@@ -27,5 +58,8 @@
     <!-- /row -->
 </div>
 
+@*Cargamos las librerias que van a necesitar require y no son dojo*@
+<script src="@Url.Content("~/Scripts/config.js")"></script>
+@*Cargamos la librería de ESRI con Dojo*@
 <script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
 <script src="@Url.Content("~/Scripts/Argo3D.js")"></script>

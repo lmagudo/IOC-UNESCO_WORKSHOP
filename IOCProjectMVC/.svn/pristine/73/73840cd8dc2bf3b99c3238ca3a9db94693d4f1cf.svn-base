@@ -1,0 +1,224 @@
+﻿
+var PropiedadesOwnData = new Object();
+PropiedadesOwnData.VariablesGlobales = ['map', 'startExtent', 'colXselected', 'colYselected', 'splineChart'];
+
+cargarvariablesGlobales();
+
+function cargarvariablesGlobales() {
+    $.each(PropiedadesOwnData.VariablesGlobales, function (index, value) {
+        PropiedadesOwnData[value] = undefined;
+    });
+}
+
+//Muestro el botón de limpiar entidades
+$('#ClearButton').show()
+
+//Ajusto el tamaño del panel donde va el mapa
+var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 170;
+$("#mapDiv").css("min-height", (height) + "px");
+
+
+//#region Map
+require([
+    "esri/urlUtils",
+    "esri/map",
+    "esri/toolbars/navigation",
+    "esri/dijit/HomeButton",
+    "esri/dijit/BasemapToggle",
+    "esri/dijit/OverviewMap",
+    "esri/dijit/Legend",
+    "esri/geometry/Extent",
+    "esri/layers/GraphicsLayer",
+    "esri/geometry/webMercatorUtils",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom",
+    "dojo/on",
+    "dojo/_base/declare",
+    "esri/config",
+    "dojo/parser",
+    "dojo/domReady!"
+], function (urlUtils, Map, Navigation, HomeButton, BasemapToggle, OverviewMap, Legend, Extent,
+    GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
+) {
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
+    parser.parse();
+
+    //Variable con la extensión inicial del mapa 
+    PropiedadesOwnData.startExtent = new Extent(-50, 12, 0, 41, new esri.SpatialReference({ wkid: 4326 }));
+
+    PropiedadesOwnData.map = new Map("mapDiv", {
+        extent: PropiedadesOwnData.startExtent,
+        center: [-20, 26],
+        basemap: "oceans",
+        logo: false
+    });
+
+    //Home Button Dijit
+    PropiedadesOwnData.home = new HomeButton({
+        map: PropiedadesOwnData.map
+    }, "HomeButton");
+    PropiedadesOwnData.home.startup();
+
+    //#region Maxima extensión del mapa
+    var navToolbar = new Navigation(PropiedadesOwnData.map);
+    //Constreñimos la extensión del mapa a la inicial por medio del evento onextentchange.
+    on(PropiedadesOwnData.map, "extent-change", function (extent) {
+        var buffer = 20; //En mi caso 1 grado
+        // set costraint extent to initExtent +buffer
+        var constraintExtent = new esri.geometry.Extent(PropiedadesOwnData.startExtent.xmin - buffer, PropiedadesOwnData.startExtent.ymin - buffer, PropiedadesOwnData.startExtent.xmax + buffer, PropiedadesOwnData.startExtent.ymax + buffer);
+        if (!constraintExtent.contains(extent.extent) || !constraintExtent.intersects(extent.extent)) {
+            // zoom back to previous extent
+            navToolbar.zoomToPrevExtent();
+        }
+    });
+    //#endregion
+
+});
+//#endregion
+
+
+//#region Selection and queries
+//Onchange event select Col X
+$("select[name='columnX']").on('change', function () {
+    PropiedadesOwnData.colXselected = $(this).find("option:selected").val();
+    PropiedadesOwnData.colYselected = $("select[name='columnY']").find("option:selected").val();
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CallGP").prop("disabled", false) : $("#CallGP").prop("disabled", true);
+});
+
+//Onchange event select Col Y
+$("select[name='columnY']").on('change', function () {
+    PropiedadesOwnData.colYselected = $(this).find("option:selected").val();
+    PropiedadesOwnData.colXselected = $("select[name='columnX']").find("option:selected").val();
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CallGP").prop("disabled", false) : $("#CallGP").prop("disabled", true);
+});
+//#endregion
+
+function CallGP() {
+    require([
+  "esri/tasks/Geoprocessor", "esri/layers/ImageParameters", "esri/tasks/FeatureSet"],
+  function (Geoprocessor, ImageParameters, FeatureSet) {
+      //var graphic = new Graphic( ... );
+      var layer = PropiedadesOwnData.map.getLayer("csvLayer");
+      //var features = [];
+      //for (var i = 0; i < layer.graphics.length; i++) {
+      //    features.push(layer.graphics[i]);
+      //}
+      var featureSet = new FeatureSet();
+      featureSet.features = layer.graphics;
+      debugger;
+      //PropiedadesOwnData.map
+      var params = {
+          "InterpolatePoints": featureSet,
+          "Z_value": "decapoda",
+          "Output_cell_size": "",
+          "Search_radius":"VARIABLE 8"
+
+      };
+      var gp = new Geoprocessor("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/Interpolation/GPServer/Interpolation");
+      gp.submitJob(params, function (jobInfo) {
+          console.log("OK");
+          if (jobInfo.jobStatus != "esriJobFailed") {
+              var imageParams = new esri.layers.ImageParameters();
+              imageParams.imageSpatialReference = PropiedadesOwnData.map.spatialReference;
+              gp.getResultImageLayer(jobInfo.jobId, "Kriging_result ", imageParams, function (gpLayer) {
+                  gpLayer.setOpacity(0.5);
+                  PropiedadesOwnData.map.addLayer(gpLayer);
+              });
+          } else {
+              console.error("EL GP ha fallado : " + jobInfo.jobStatus)
+          }
+      }, function () {
+          console.log("Executing");
+      },
+      function () {
+          console.log("Error");
+      });
+  });
+
+}
+
+//#region Graph
+function CreateGraph() {
+    require(['highcharts', 'exporting-highcharts'], function () {
+        var dataX = [],
+       dataY = [],
+       data = [],
+       serieX,
+       serieY,
+       Series = [];
+
+        $.each(PropiedadesOwnData.map.getLayer('csvLayer').graphics, function (index, value) {
+            var item = [];
+            item.push(value.attributes[PropiedadesOwnData.colXselected], value.attributes[PropiedadesOwnData.colYselected]);
+            data.push(item);
+        });
+
+        //If checkbox order by X axix is checked order the data by the X column
+        ($('#OrderXAxis').is(':checked')) ? data.sort(function (a, b) { return a[0] - b[0]; }) : "";
+
+        serieY = {
+            name: PropiedadesOwnData.colYselected,
+            data: data
+        };
+
+        Series.push(serieY);
+
+
+        $('#rowGraphOwnData').show();
+        PropiedadesOwnData.splineChart = $('#SplinegraphOwnData').highcharts({
+
+            chart: {
+                type: 'spline'
+            },
+
+            title: null,
+
+            xAxis: {
+                title: {
+                    text: String($("#UnitsXAxis").val())
+                }
+            },
+            yAxis: {
+                title: {
+                    text: String($("#UnitsYAxis").val())
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            //tooltip: {
+            //    formatter: function () {
+            //        return this.series.name + ' ' + this.x +
+            //            ': <b>' + this.y + '</b>' + ' UI(m3*s-1*km-1)';
+            //    },
+            //    //valueSuffix: 'UI(m3*s-1*km-1)'
+            //},
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: Series
+        });
+    });
+
+}
+//#endregion
+
+//#region Clear
+function clearGraphics() {
+    PropiedadesOwnData.map.removeLayer(PropiedadesOwnData.map.getLayer('csvLayer'));
+    $('#rowGraphOwnData').hide();
+    $('#GraphicsOwnData_Panel').hide();
+    $('#OrderXAxis').prop(':checked', false);
+    $("#UnitsXAxis").val("");
+    $("#UnitsYAxis").val("");
+    $("#CreateGraph").prop("disabled", true)
+}
+//#endregion

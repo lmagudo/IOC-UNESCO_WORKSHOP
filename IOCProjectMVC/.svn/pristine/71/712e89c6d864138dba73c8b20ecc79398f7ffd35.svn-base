@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ProxyConfig allowedReferers="*"
+             mustMatch="true">
+    <serverUrls>
+        <serverUrl url="http://services.arcgisonline.com"
+                   matchAll="true"/>
+		<serverUrl url="http://barreto.md.ieo.es/arcgis/rest/services"
+                   matchAll="true"/>
+      <serverUrl url="http://gmis.jrc.ec.europa.eu/webservices/4km/wms-t/africa?"
+                   matchAll="true"/>
+      <serverUrl url="http://gmis.jrc.ec.europa.eu/webservices/4km/wms/pathfinder?"
+                   matchAll="true"/>
+      <serverUrl url="http://sampleserver1c.arcgisonline.com/arcgisoutput/"
+                   matchAll="true"/>
+      <serverUrl url="http://ideo-cclme.2carto.com/"
+                   matchAll="true"/>
+      <serverUrl url="http://localhost:6080/arcgis/rest/services"
+                   matchAll="true"/>
+      <serverUrl url="http://gessergis3:6080/arcgis/rest/services"
+                 matchAll="true"/>
+    </serverUrls>
+  
+</ProxyConfig>
+
+<!-- See https://github.com/Esri/resource-proxy for more information -->

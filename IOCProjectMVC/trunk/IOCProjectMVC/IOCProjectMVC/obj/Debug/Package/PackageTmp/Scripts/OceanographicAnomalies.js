@@ -153,7 +153,7 @@ require([
     on, dom, domConstruct, parser, arrayUtils, ioquery, declare
 ) {
     var legend;
-    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
     parser.parse();
 
     //Variable con la extensión inicial del mapa 
@@ -207,6 +207,7 @@ require([
 
         getImageUrl: function (extent, width, height, callback) {
             var mp = webMercatorUtils.webMercatorToGeographic(extent);
+            mp.ymin = mp.ymin + 1.5;
             var params = {
                 request: "GetMap",
                 transparent: true,
@@ -333,7 +334,6 @@ require([
         //var meslayer = combo1.options[combo1.selectedIndex].value;
         //var combo2 = dojo.byId("Select8");
         //var añolayer = combo2.options[combo2.selectedIndex].value;
-        debugger;
         //var img = legendDiv
         var parameter = $("select[name='OneParameter']").find("option:selected").val();
         if (parameter == "Temperature") {

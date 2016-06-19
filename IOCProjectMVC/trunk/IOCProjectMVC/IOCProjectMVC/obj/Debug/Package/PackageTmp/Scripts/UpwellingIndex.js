@@ -22,6 +22,7 @@ $("select[name='source_list']").on('change', function () {
     PropiedadesUpwelling.sourcetextselected = $(this).find("option:selected").text();
     PropiedadesUpwelling.yearselected = $("select[name='year_list']").find("option:selected").val();
     (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#InsertButtonUpwelling").prop("disabled", false) : $("#InsertButtonUpwelling").prop("disabled", true);
+    (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#RemoveButtonUpwelling").prop("disabled", false) : $("#RemoveButtonUpwelling").prop("disabled", true);
     PropiedadesUpwelling.urlxml = PropiedadesUpwelling.urlxml + PropiedadesUpwelling.sourceselected + "_mensual.xml";
     console.log(PropiedadesUpwelling.urlxml);
 });
@@ -31,103 +32,11 @@ $("select[name='year_list']").on('change', function () {
     PropiedadesUpwelling.yearselected = $(this).find("option:selected").val();
     PropiedadesUpwelling.sourceselected = $("select[name='source_list']").find("option:selected").val();
     (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#InsertButtonUpwelling").prop("disabled", false) : $("#InsertButtonUpwelling").prop("disabled", true);
+    (PropiedadesUpwelling.sourceselected != "" && PropiedadesUpwelling.yearselected != "") ? $("#RemoveButtonUpwelling").prop("disabled", false) : $("#RemoveButtonUpwelling").prop("disabled", true);
 });
 
-
-
-$.ajax({
-    type: "get",
-    url: "http://localhost:29128/App_Data/HFNMOC_mensual.xml",
-    dataType: "jsonp",
-    success: function (data) {
-        /* handle data here */
-        console.log(data);
-    },
-    error: function (xhr, status) {
-        /* handle error here */
-        console.log(xhr);
-        console.log(status);
-    }
-});
-
-var xmlDoc
-$.ajax({
-    type: "POST",
-    url: "http://localhost:29128/App_Data/HFNMOC_mensual.xml",
-    dataType: "json",
-    success: function (xml) {
-        console.log('hecho');
-        xmlDoc = loadXMLDoc(xml),
-        console.log(xmlDoc);
-    },
-    //other code
-    error: function (error) {
-        console.log(error);
-    }
-});
-
-
-//xmldoc = loadXMLDoc("http://localhost:29128/App_Data/HFNMOC_mensual.xml");
-//xmldoc = loadXMLDoc("http://www.indicedeafloramiento.ieo.es/xml/HFNMOC_mensual.xml");
-//console.log(xmldoc);
-//var bb=xmldoc.getElementsByTagName("item").length;
-
-
-//if (bb>10){
-//    bb=10;
-//}
-//var i
-//var archivo
-//var titulo
-
-//for(i=0;i<bb;i++){
-//    codigotem+="<table width=100% border=0>"
-
-//    titulo=xmldoc.getElementsByTagName("item")[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
-//    fecha=xmldoc.getElementsByTagName("item")[i].getElementsByTagName("pubDate")[0].childNodes[0].nodeValue;
-//    descripcion=xmldoc.getElementsByTagName("item")[i].getElementsByTagName("description")[0].childNodes[0].nodeValue;
-//    subtitulo=xmldoc.getElementsByTagName("item")[i].getElementsByTagName("subtitle")[0].childNodes[0].nodeValue;
-//    imagen=xmldoc.getElementsByTagName("item")[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
-
-//    codigotem+="<tr><td  class=cabecero>"+titulo+" ("+fecha+")</td></tr>"
-//    codigotem+="<tr><td  class=subcabecero>"+subtitulo+"</td></tr>"
-//    codigotem+="<tr><td class=bloque align=center><a href=index1_es.php><img src="+imagen+" width=98% height=200px border=0/></td></tr>"
-//    codigotem+="<tr><td class=bloque>"+descripcion+"</td></tr>"
-//    codigotem+="</table>"
-
-//}
-
-//console.log(codigotem);
-
-PropiedadesUpwelling.serie1 = {
-    name: 'HFNMOC 2016',
-    data: [-978.573, 228.738, 386.888, -267.686, -15.522, 491.513, undefined, undefined, undefined, undefined, undefined, undefined],
-    color: "blue"
-}
-PropiedadesUpwelling.serie2 = {
-    name: 'HMeteogalicia 2015',
-    data: [198.801, 841.263, 892.858, 297.484, 6.141, 1193.723, 95.628, 225.597, 389.532, -200.625, -578.589, -3488.552],
-    color: "green"
-}
 
 PropiedadesUpwelling.Series = [];
-
-function loadXMLDoc(dname) {
-
-    if (navigator.appName == 'Microsoft Internet Explorer') {
-        xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        xhttp.open("GET", dname, false);
-    } else {
-        xhttp = new XMLHttpRequest();
-        xhttp.open("GET", dname, false);
-    }
-
-    console.log(xhttp);
-
-    xhttp.send();
-    return xhttp.responseXML;
-
-}
 
 //#endregion
 
@@ -140,7 +49,9 @@ require([
     "esri/dijit/OverviewMap",
     "esri/dijit/Legend",
     "esri/geometry/Extent",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/layers/GraphicsLayer",
+    "esri/InfoTemplate",
     "esri/geometry/webMercatorUtils",
     "dojo/_base/array",
     "dojo/dom-construct",
@@ -151,9 +62,9 @@ require([
     "dojo/parser",
     "dojo/domReady!"
 ], function (urlUtils, Map, Navigation, BasemapToggle, OverviewMap, Legend, Extent,
-    GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
+    ArcGISDynamicMapServiceLayer, GraphicsLayer, InfoTemplate, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
 ) {
-    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
     parser.parse();
 
     //Variable con la extensión inicial del mapa 
@@ -180,35 +91,102 @@ require([
     });
     //#endregion
 
+    //#region Layers
+
+    PropiedadesUpwelling.UpwellingStationsLayer = new ArcGISDynamicMapServiceLayer("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/Upwelling_Estaciones/MapServer", {
+        opacity: 0.8,
+        id: "UpwellingStations",
+        infoTemplates: {
+            0: {
+                infoTemplate: new InfoTemplate("${Titulo}", "Acronym: ${Fuente}<br>Latitude: ${Lat}<br>Longitude: ${Lon}"),
+                layerUrl: "http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/Upwelling_Estaciones/MapServer/0"
+            }
+        }
+    });
+
+    PropiedadesUpwelling.UpwellingStationsLayer.setVisibleLayers([0]);
+
+    PropiedadesUpwelling.layersIds = [{ "Name": "Upwelling Stations", "id": "UpwellingStations" }];
+
+    PropiedadesUpwelling.map.addLayers([PropiedadesUpwelling.UpwellingStationsLayer]);
+
+    //#endregion
+
 });
 //#endregion
 
+//#region Get Data and prepare Series
+function getxml() {
+    if (existSource()) {
+        var urlxml,
+            xmldoc,
+            sourceselected,
+            yearselected;        
+
+        sourceselected = $("select[name='source_list']").find("option:selected").val();
+        yearselected = $("select[name='year_list']").find("option:selected").val();
+        urlxml = "http://www.indicedeafloramiento.ieo.es/refrescaurl.php?url=http://www.indicedeafloramiento.ieo.es/xml/" + sourceselected + "_mensual.xml"
+        console.log(urlxml);
+        $.ajax({
+            type: "POST",
+            url: urlxml,
+            dataType: "xml",
+            success: function (xml) {
+                xmldoc = xml;
+
+                var bb = xmldoc.getElementsByTagName("ano").length;
+              
+                var dataserie = [];
+
+                for (i = 0; i < bb; i++) {
+                    if (yearselected == parseFloat(xmldoc.getElementsByTagName("ano")[i].childNodes[0].nodeValue)) {
+                        dataserie.push(parseFloat(xmldoc.getElementsByTagName("ui")[i].childNodes[0].nodeValue));
+                    }
+                }
+
+                PropiedadesUpwelling["serie_" + sourceselected + "_" + yearselected] = {
+                    name: sourceselected + " " + yearselected,
+                    data: dataserie,
+                    color: newRandomColor()
+                }
+
+                PropiedadesUpwelling.Series.push(PropiedadesUpwelling["serie_" + sourceselected + "_" + yearselected]);
+
+                addSerietoGraph();
+            },
+            //other code
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }    
+}
+
+function newRandomColor() {
+    var color = [];
+    color.push((Math.random() * 255).toFixed());
+    color.push((Math.random() * 255).toFixed());
+    color.push((Math.random() * 255).toFixed());
+    color.push((Math.random()).toFixed(2));
+    var text = 'rgba(' + color.join(',') + ')';
+    console.log(text);
+    return text;
+}
+
+//#endregion
 
 //#region Graphs
 function addSerietoGraph() {
     if (existSource()) {
-        //PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie1);
         require(['highcharts', 'exporting-highcharts'], function () {
-            //$.ajax({
-            //    type: "get",
-            //    url: "http://localhost:29128/App_Data/HFNMOC_mensual.xml",
-            //    dataType: "jsonp",
-            //    success: function (data) {
-            //        /* handle data here */
-            //        console.log(data);
-            //    },
-            //    error: function (xhr, status) {
-            //        /* handle error here */
-            //        console.log(xhr);
-            //        console.log(status);
-            //    }
-            //});
-
             $('#tableSourceUpwelling').show();
-            (PropiedadesUpwelling.Series.length > 0) ? PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie1) : PropiedadesUpwelling.Series.push(PropiedadesUpwelling.serie2);
             prepareTable();
             addsourcetoTable();
             var UpwellingChart = $('#graphicUpwelling').highcharts({
+
+                chart: {
+                    type: 'spline',
+                },
 
                 title: null,
 
@@ -239,6 +217,13 @@ function addSerietoGraph() {
                     verticalAlign: 'middle',
                     borderWidth: 0
                 },
+                plotOptions: {                    
+                    spline: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
                 series: PropiedadesUpwelling.Series
             });
 
@@ -249,7 +234,30 @@ function addSerietoGraph() {
 }
 
 function removeSerietoGraph() {
-    console.log(PropiedadesUpwelling.sourceselected, PropiedadesUpwelling.yearselected);
+    console.log(PropiedadesUpwelling.arraysources);
+    $.each(PropiedadesUpwelling.arraysources, function (index, value) {
+        if (value['Acronym'] == PropiedadesUpwelling.sourceselected && value['Year'] == PropiedadesUpwelling.yearselected) {
+            PropiedadesUpwelling.arraysources.splice(index, 1);
+            PropiedadesUpwelling.UpwellingnodoTablaSource = $("[data-html-id='dataTableSourceUpwelling']");
+            //nodoTabla.parent().addClass("estiloTabla");
+            PropiedadesUpwelling.UpwellingTablaSource = PropiedadesUpwelling.UpwellingnodoTablaSource.DataTable({
+                data: PropiedadesUpwelling.arraysources,
+                "bPaginate": false,
+                //"dom": "<'row'<'col-md-6'l><'col-md-6'f>><'row'<'col-md-6'B><'col-md-6'p>><'row'<'col-md-12't>><'row'<'col-md-12'i>>",
+                'aoColumns': EsquemaColumnas,
+                "language": {
+                    "url": "  http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
+                },
+                dom: 'Bfrtip',
+                //buttons: [
+                //    'copy', 'csv', 'pdf'
+                //]
+
+            });
+            return false;
+        }
+    });
+    
 }
 
 //#endregion
@@ -299,7 +307,7 @@ function prepareTableSource() {
 
 function addsourcetoTable() {
 
-    require(['datatables', 'datatables-bootstrap', 'datatables-buttons', 'datatables-buttons-flash'], function () {
+    require(['datatables', 'datatables-bootstrap'], function () {
         var EsquemaColumnas,
         data,
     EsquemaColumnas = [];
@@ -343,11 +351,31 @@ function addsourcetoTable() {
                 "url": "  http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json"
             },
             dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'pdf'
-            ]
+            //buttons: [
+            //    'copy', 'csv', 'pdf'
+            //]
 
         });
+
+        $("[data-html-id='dataTableSourceUpwelling']  tbody").on('click', 'tr', function (event) {
+            if (event.shiftKey) {
+                var tag = $(this).parent();
+                $(this).addClass('selected-row');
+            }
+
+            else {
+                if ($(this).hasClass('selected-row')) {
+                    $(this).removeClass('selected-row');
+                }
+                else {
+                    var tag = $(this).parent();
+                    tag.find("tr").removeClass("selected-row");
+                    $(this).addClass('selected-row');
+
+                }
+            }
+        });
+
         $("#graphicUpwelling").show();
     });
 

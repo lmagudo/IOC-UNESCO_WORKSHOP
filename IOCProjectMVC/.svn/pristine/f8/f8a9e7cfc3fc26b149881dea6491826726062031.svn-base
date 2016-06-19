@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewBag.Title = "BiologicalData";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default MapPanels">
+            <div class="panel-heading">
+                Biological Data: abundance, distribution, special richness
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Map -->
+                        <div id="mapDiv">
+                            <!-- Homemap -->
+                            <div id="HomeButton"></div>
+
+                            <!-- Select Features Panel -->
+                            <div class="draggablePanel panel panel-info" id="BiologicalData_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Select samples</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <!-- Selectors -->
+                                    <form role="form">
+                                        <div class="form-group row">
+                                            <div class="col-lg-12">
+                                                <label>Source</label>
+                                                <select class="form-control" name="Source" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Source</option>
+                                                    <option value="IEO">IEO</option>
+                                                    <option value="OBIS">OBIS</option>
+                                                    <option value="BOTH">IEO & OBIS</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <h4>OBIS</h4>
+                                        <div class="form-group row">
+                                            <div class="col-lg-6">
+                                                <label>Kingdom</label>
+                                                <select class="form-control" disabled name="Kingdom" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Kingdom</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Specie</label>
+                                                <select class="form-control" disabled name="Namespecies" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a specie</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <h4>IEO</h4>
+                                        <div class="form-group row">
+                                            <div class="col-lg-6">
+                                                <label>Survey</label>
+                                                <select class="form-control" disabled name="SurveyIEO" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a Survey</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label>Specie</label>
+                                                <select class="form-control" disabled name="NamespeciesIEO" lang="es" xml:lang="es">
+                                                    <option value="" selected disabled>Select a specie</option>
+                                                </select>
+                                            </div>
+                                        </div>                                                                           
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="SelectBioButton" disabled class="btn btn-success" onclick="SelectSamples()">Select</button>
+                                            <button id="PolygonDrawButton" disabled class="btn btn-success" onclick="DrawPolygon()">By Polygon</button>
+                                            <button id="BufferDrawButton" disabled class="btn btn-success" onclick="ShowBufferPanel()">By Buffer</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <button id="AddSerieButton" disabled class="btn btn-success">Add Serie</button>
+                                            <!-- /.col-lg-12 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Geodesic Tools Panel -->
+                            <div class="draggablePanel panel panel-info" id="Geodesic_Panel">
+                                <div class="panel-heading draggable-heading">
+                                    <h3 class="panel-title">Geodesic Tools</h3>
+                                    @*<span class="pull-right" data-effect="hide"><i class="fa fa-times"></i></span>*@
+                                </div>
+                                <div class="panel-body">
+                                    <label>Buffer Method</label>
+                                    <br />
+                                    <select class="combobox-container" placeholder="Choose a method" required autofocus id="GeodesicMethod" onchange="Option_selected()">
+                                        <option value="">Choose a Method</option>
+                                        <option value="Euclidean">Euclidean</option>
+                                        <option value="Geodesic">Geodesic</option>
+                                    </select>
+                                    <br>
+                                    <label>Unit</label>
+                                    <br />
+                                    <select class="combobox-container" placeholder="Choose a Unit of measure" required autofocus id="Unit" onchange="Option_selected()">
+                                        <option value="">Choose a Unit of measure</option>
+                                        <option value="9001">Meters</option>
+                                        <option value="9036">Kilometers</option>
+                                        <option value="9035">Miles</option>
+                                        <option value="9030">Nautical Miles</option>
+                                    </select>
+                                    <br>
+                                    <label>Distance</label>
+                                    <br />
+                                    <input type="text" id="Distance" placeholder="Type a distance" onkeyup="checkInput(this)" required value="" />
+                                    <br />
+                                    <h1 align="center">
+                                        <button id="CreateBuffer" type="button" class="btn btn-sm btn-primary btn-navegacion" disabled="disabled" onclick="UseGeodesicTools()">Create Buffer</button>
+                                    </h1>                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.col-lg-12 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /row -->
+</div>
+
+<div class="row" id="rowGraphBiologicalData">
+    <div class="col-lg-6">
+        <div class="well" id="PieChartBiologicalData">
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+    <!-- /row -->
+</div>
+<div class="row" id="rowTablesBiologicalData">
+    <div class="col-lg-12">
+        <!-- /.col-lg-12 -->
+        <div class="well" id="TableBiologicalData">
+        </div>
+    </div>
+    <!-- /row -->
+</div>
+
+<!-- Table with data -->
+<!-- Tabla con los datos -->
+<div style="display:none">
+    <table id="dataindex" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+            <tr bgcolor="#CCCCFF" nowrap="">
+                <th class="hdr" colspan="4">Table of Frequencies (percent)</th>
+            </tr>
+            <tr bgcolor="#CCCCFF" nowrap="">
+                <th class="freq">Direction</th>
+                <th class="freq">Abundance</th>
+                <th class="freq">Richness</th>
+                <th class="freq">Biomass</th>
+                <th class="freq">Trofic Index</th>
+            </tr>
+            <tr nowrap="">
+                <td class="dir">Abundance</td>
+                <td id="Abundance" class="data"></td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+            </tr>
+            <tr nowrap="">
+                <td class="dir">Richness</td>
+                <td class="data">0</td>
+                <td id="Richness" class="data"></td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+            </tr>
+            <tr nowrap="">
+                <td class="dir">Biomass</td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+                <td id="Biomass" class="data"></td>
+                <td class="data">0</td>
+            </tr>
+            <tr nowrap="">
+                <td class="dir">Trofic Index</td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+                <td class="data">0</td>
+                <td id="TroficIndex" class="data"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- scripts -->
+@*Cargamos las librerias que van a necesitar require y no son dojo*@
+<script src="@Url.Content("~/Scripts/config.js")"></script>
+@*Cargamos la librería de ESRI con Dojo*@
+<script src="@Url.Content("https://js.arcgis.com/3.16/")"></script>
+
+<script src="@Url.Content("~/Scripts/BiologicalData.js")"></script>
+<script src="@Url.Content("~/Scripts/GeodesicTools.js")"></script>

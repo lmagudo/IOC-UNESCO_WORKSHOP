@@ -37,7 +37,7 @@ require([
 ], function (urlUtils, Map, Navigation, BasemapToggle, OverviewMap, Legend, Extent,
     GraphicsLayer, webMercatorUtils, Draw, array, domConstruct, dom, on, declare, esriConfig, parser
 ) {
-    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
     parser.parse();
 
     //Variable con la extensión inicial del mapa 

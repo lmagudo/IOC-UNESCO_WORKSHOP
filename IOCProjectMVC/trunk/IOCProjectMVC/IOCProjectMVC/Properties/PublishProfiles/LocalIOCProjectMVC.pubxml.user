@@ -82,10 +82,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 22:17:37</publishTime>
     </File>
     <File Include="bin/sb-admin-2.Web.dll">
-      <publishTime>06/11/2016 22:22:50</publishTime>
+      <publishTime>06/19/2016 09:43:03</publishTime>
     </File>
     <File Include="bin/sb-admin-2.Web.pdb">
-      <publishTime>06/11/2016 22:22:50</publishTime>
+      <publishTime>06/17/2016 10:32:28</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>05/26/2016 16:14:44</publishTime>
@@ -6379,7 +6379,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:07</publishTime>
     </File>
     <File Include="Content/Graphs.css">
-      <publishTime>06/13/2016 11:06:50</publishTime>
+      <publishTime>06/19/2016 07:42:33</publishTime>
     </File>
     <File Include="Content/less/mixins.less">
       <publishTime>05/26/2016 16:07:07</publishTime>
@@ -6391,10 +6391,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:07</publishTime>
     </File>
     <File Include="Content/map.css">
-      <publishTime>06/13/2016 22:53:28</publishTime>
+      <publishTime>06/19/2016 07:11:41</publishTime>
     </File>
     <File Include="Content/sb-admin-2.css">
-      <publishTime>06/06/2016 11:10:52</publishTime>
+      <publishTime>06/19/2016 07:10:26</publishTime>
     </File>
     <File Include="Content/timeline.css">
       <publishTime>05/26/2016 16:07:07</publishTime>
@@ -6438,17 +6438,29 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     <File Include="packages.config">
       <publishTime>05/26/2016 22:17:24</publishTime>
     </File>
+    <File Include="proxy/asp/proxy.ashx">
+      <publishTime>06/17/2016 10:32:11</publishTime>
+    </File>
+    <File Include="proxy/asp/proxy.config">
+      <publishTime>06/18/2016 21:04:34</publishTime>
+    </File>
+    <File Include="proxy/asp/README.md">
+      <publishTime>06/17/2016 10:32:11</publishTime>
+    </File>
+    <File Include="proxy/asp/Web.config">
+      <publishTime>06/17/2016 10:32:11</publishTime>
+    </File>
     <File Include="proxy/proxy.php">
-      <publishTime>06/11/2016 17:06:10</publishTime>
+      <publishTime>06/18/2016 20:13:12</publishTime>
     </File>
     <File Include="Scripts/Argo3D.js">
-      <publishTime>06/03/2016 11:28:48</publishTime>
+      <publishTime>06/18/2016 08:05:41</publishTime>
     </File>
     <File Include="Scripts/BathymetricTransects.js">
-      <publishTime>06/13/2016 12:50:15</publishTime>
+      <publishTime>06/19/2016 06:26:11</publishTime>
     </File>
     <File Include="Scripts/BiologicalData.js">
-      <publishTime>06/13/2016 23:43:40</publishTime>
+      <publishTime>06/19/2016 09:36:51</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>05/26/2016 16:07:08</publishTime>
@@ -6460,13 +6472,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>06/13/2016 12:26:36</publishTime>
     </File>
     <File Include="Scripts/DragDrop.js">
-      <publishTime>06/05/2016 01:15:38</publishTime>
+      <publishTime>06/18/2016 20:13:58</publishTime>
     </File>
     <File Include="Scripts/flot-data.js">
       <publishTime>05/26/2016 16:07:08</publishTime>
     </File>
     <File Include="Scripts/GeodesicTools.js">
-      <publishTime>05/29/2016 22:01:31</publishTime>
+      <publishTime>06/17/2016 06:33:06</publishTime>
     </File>
     <File Include="Scripts/InterpolationTools.js">
       <publishTime>06/03/2016 12:33:04</publishTime>
@@ -6493,7 +6505,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Scripts/main.js">
-      <publishTime>06/08/2016 23:46:05</publishTime>
+      <publishTime>06/17/2016 05:22:08</publishTime>
     </File>
     <File Include="Scripts/modernizr-2.6.2.js">
       <publishTime>05/26/2016 16:07:09</publishTime>
@@ -6502,10 +6514,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Scripts/OceanographicAnomalies.js">
-      <publishTime>06/13/2016 00:25:44</publishTime>
+      <publishTime>06/19/2016 06:45:29</publishTime>
     </File>
     <File Include="Scripts/OceanographicTransects.js">
-      <publishTime>06/09/2016 14:15:28</publishTime>
+      <publishTime>06/18/2016 20:59:23</publishTime>
     </File>
     <File Include="Scripts/PrecipitationDischarges.js">
       <publishTime>06/03/2016 12:17:59</publishTime>
@@ -6517,7 +6529,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Scripts/sb-admin-2.js">
-      <publishTime>06/08/2016 23:53:21</publishTime>
+      <publishTime>06/18/2016 20:13:58</publishTime>
     </File>
     <File Include="Scripts/SpatioTemporalViewer.js">
       <publishTime>06/03/2016 12:21:11</publishTime>
@@ -6532,10 +6544,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>06/09/2016 14:13:07</publishTime>
     </File>
     <File Include="Scripts/UpwellingIndex.js">
-      <publishTime>06/13/2016 13:03:18</publishTime>
+      <publishTime>06/18/2016 20:20:48</publishTime>
     </File>
     <File Include="Scripts/UsingOwnData.js">
-      <publishTime>06/09/2016 22:40:55</publishTime>
+      <publishTime>06/19/2016 06:45:29</publishTime>
     </File>
     <File Include="Scripts/_references.js">
       <publishTime>06/11/2016 19:39:52</publishTime>
@@ -6544,13 +6556,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/30/2016 00:10:59</publishTime>
     </File>
     <File Include="Views/Home/Argo3D.cshtml">
-      <publishTime>06/04/2016 22:38:36</publishTime>
+      <publishTime>06/18/2016 08:06:34</publishTime>
     </File>
     <File Include="Views/Home/BathymetricTransects.cshtml">
-      <publishTime>06/10/2016 10:09:06</publishTime>
+      <publishTime>06/19/2016 06:36:03</publishTime>
     </File>
     <File Include="Views/Home/BiologicalData.cshtml">
-      <publishTime>06/13/2016 22:40:22</publishTime>
+      <publishTime>06/19/2016 08:19:41</publishTime>
     </File>
     <File Include="Views/Home/Blank.cshtml">
       <publishTime>05/26/2016 16:07:09</publishTime>
@@ -6571,7 +6583,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>06/09/2016 10:06:05</publishTime>
+      <publishTime>06/17/2016 05:22:07</publishTime>
     </File>
     <File Include="Views/Home/InterpolationTools.cshtml">
       <publishTime>06/03/2016 12:32:15</publishTime>
@@ -6613,10 +6625,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Views/Home/UpwellingIndex.cshtml">
-      <publishTime>06/11/2016 18:58:45</publishTime>
+      <publishTime>06/14/2016 23:31:08</publishTime>
     </File>
     <File Include="Views/Home/UsingOwnData.cshtml">
-      <publishTime>06/09/2016 22:39:33</publishTime>
+      <publishTime>06/18/2016 20:13:58</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>05/26/2016 16:07:09</publishTime>
@@ -6637,7 +6649,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/26/2016 16:07:09</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/07/2016 22:15:18</publishTime>
+      <publishTime>06/07/2016 22:12:41</publishTime>
     </File>
   </ItemGroup>
 </Project>

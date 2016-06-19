@@ -1,4 +1,7 @@
 ﻿// Script donde está la funcionalidad para usar geoprocesamientos como buffers en cliente
+var PropiedadesGeodesicTools = new Object();
+PropiedadesGeodesicTools.map = undefined;
+PropiedadesGeodesicTools.tb = null;
 
 // Función que se ejecuta al presionar el botón Query. Nos muestra el panel de consultas
 function ShowGeodesicPanel() {
@@ -38,7 +41,7 @@ function Option_selected() {
     }
 }
 
-function CreateBuffer() {
+function CreateBuffer(map) {
     require([
         "dojo/_base/array",
         "esri/geometry/geometryEngine",
@@ -49,9 +52,11 @@ function CreateBuffer() {
         "esri/symbols/SimpleMarkerSymbol",
         "esri/symbols/SimpleFillSymbol"
     ], function (array, geometryEngine, Draw, Color, Graphic, SimpleLineSymbol, SimpleMarkerSymbol, SimpleFillSymbol) {
-        PropiedadesMapa.tb = new Draw(PropiedadesMapa.map);
-        PropiedadesMapa.tb.on("draw-end", DrawResults);
-        PropiedadesMapa.tb.activate(Draw.POINT);
+        //Igualo mi variable mapa al mapa pasado en la función, así puedo usar este script en otras vistas
+        PropiedadesGeodesicTools.map = map;
+        PropiedadesGeodesicTools.tb = new Draw(PropiedadesGeodesicTools.map);
+        PropiedadesGeodesicTools.tb.on("draw-end", DrawResults);
+        PropiedadesGeodesicTools.tb.activate(Draw.POINT);
 
         function DrawResults(evt) {
             // add the drawn graphic to the map
@@ -69,7 +74,7 @@ function CreateBuffer() {
             );
 
             var graphicpoint = new Graphic(geometry, symbol);
-            PropiedadesMapa.map.graphics.add(graphicpoint);
+            PropiedadesGeodesicTools.map.graphics.add(graphicpoint);
 
             var e = dojo.byId("GeodesicMethod");
             var f = dojo.byId("Unit");
@@ -91,11 +96,14 @@ function CreateBuffer() {
             var symbol2 = new SimpleFillSymbol();
             symbol2.setColor(new Color([100, 100, 100, 0.25]));
             symbol2.setOutline(null);
-            PropiedadesMapa.map.graphics.add(new Graphic(bufferedGeometries, symbol2));
+            var path = getAbsolutePath();
+            //Si estamos en Biological Data hago una query con la geometría
+            (path == "BiologicalData" || path == "BiologicalData#") ? BiologicalqueryBuffer(bufferedGeometries) : "";
+            PropiedadesGeodesicTools.map.graphics.add(new Graphic(bufferedGeometries, symbol2));
             array.forEach(bufferedGeometries, function (buffergeometry) {
-                PropiedadesMapa.map.graphics.add(new Graphic(buffergeometry, symbol2));
+                PropiedadesGeodesicTools.map.graphics.add(new Graphic(buffergeometry, symbol2));
             });
-            PropiedadesMapa.tb.deactivate()
+            PropiedadesGeodesicTools.tb.deactivate()
         }
 
     });
@@ -120,4 +128,11 @@ function checkInput(ob) {
     else {
         var p = dojo.byId("CreateBuffer").disabled = true;
     }
+}
+
+function getAbsolutePath() {
+    var loc = window.location;
+    var pathName = loc;
+    var loc_array = loc.pathname.split("/");
+    return loc_array[loc_array.length - 1];
 }

@@ -70,11 +70,11 @@
                 CartographicLineSymbol.CAP_ROUND,
                 CartographicLineSymbol.JOIN_MITER, 2
         );
-        debugger;
+
         var profileParams = {
             map: PropiedadesBathyTransects.map,
             profileTaskUrl: "https://elevation.arcgis.com/arcgis/rest/services/Tools/ElevationSync/GPServer",
-            scalebarUnits: Units.MILES
+            scalebarUnits: Units.METERS
         };
         epWidget = new ElevationsProfileWidget(profileParams, dom.byId("profileChartNode"));
         epWidget.startup();
@@ -108,7 +108,7 @@
 
 
    
-    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
     //parser.parse();
 
     //Variable con la extensión inicial del mapa 

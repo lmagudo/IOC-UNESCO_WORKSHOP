@@ -426,7 +426,6 @@ table.dataTable thead .sorting:after {
 #tableSourceUpwelling {
     margin:10px;
 }
-
-/*Region 3DArgo*/
-
-/*Region OwnData*/
+.closeButtonPanel {
+    cursor: pointer  !important;
+}

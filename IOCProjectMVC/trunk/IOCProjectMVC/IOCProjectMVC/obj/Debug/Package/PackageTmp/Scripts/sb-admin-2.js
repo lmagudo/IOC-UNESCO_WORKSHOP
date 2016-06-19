@@ -41,11 +41,17 @@ $(function() {
 $(function () {
     require(["jqueryui"], function () {
         $(".draggablePanel").each(function () {
+           
             $(this).hasClass("panel") ? $(this).draggable({
                 handle: ".panel-heading"
             }) : $(this).draggable({
                 handle: ".modal-header"
             });
+            //Para el cierre
+            $(this).find(".panel-heading").prepend('<span name="closePanel" class="pull-right closeButtonPanel" data-effect="hide"><i class="fa fa-times"></i></span>');
+            $(this).find("[name='closePanel']").click(function () {
+                $(this).parents(".draggablePanel").hide();
+            })
         });
     });
 });

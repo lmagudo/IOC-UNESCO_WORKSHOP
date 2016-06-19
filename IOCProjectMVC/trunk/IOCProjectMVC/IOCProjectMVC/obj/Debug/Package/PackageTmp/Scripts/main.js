@@ -218,3 +218,7 @@ function updateLayerVisibility(evt) {
     clayer.setVisibility(!clayer.visible);
     this.checked = clayer.visible;
 }
+
+function UseGeodesicTools() {
+    CreateBuffer(PropiedadesMapa.map);
+}

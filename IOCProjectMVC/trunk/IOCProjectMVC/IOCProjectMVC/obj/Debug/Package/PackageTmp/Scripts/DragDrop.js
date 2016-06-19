@@ -330,6 +330,7 @@
               if (esritypes.indexOf(value.type) != -1) {
                   $("[name='columnX']").append($('<option>').text(value.name).attr('value', value.name));
                   $("[name='columnY']").append($('<option>').text(value.name).attr('value', value.name));
+                  $("[name='zValueFieldGP']").append($('<option>').text(value.name).attr('value', value.name));
               }
           });
 

@@ -41,7 +41,7 @@ require([
 ], function (urlUtils, Map, Navigation, HomeButton, BasemapToggle, OverviewMap, Legend, Extent,
     GraphicsLayer, webMercatorUtils, array, domConstruct, dom, on, declare, esriConfig, parser
 ) {
-    esriConfig.defaults.io.proxyUrl = "../proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "../proxy/asp/proxy.ashx";
     parser.parse();
 
     //Variable con la extensión inicial del mapa 
@@ -84,6 +84,7 @@ $("select[name='columnX']").on('change', function () {
     PropiedadesOwnData.colXselected = $(this).find("option:selected").val();
     PropiedadesOwnData.colYselected = $("select[name='columnY']").find("option:selected").val();
     (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CallGP").prop("disabled", false) : $("#CallGP").prop("disabled", true);
 });
 
 //Onchange event select Col Y
@@ -91,8 +92,56 @@ $("select[name='columnY']").on('change', function () {
     PropiedadesOwnData.colYselected = $(this).find("option:selected").val();
     PropiedadesOwnData.colXselected = $("select[name='columnX']").find("option:selected").val();
     (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CreateGraph").prop("disabled", false) : $("#CreateGraph").prop("disabled", true);
+    (PropiedadesOwnData.colXselected != "" && PropiedadesOwnData.colYselected != "") ? $("#CallGP").prop("disabled", false) : $("#CallGP").prop("disabled", true);
 });
 //#endregion
+
+function ShowPanelGP() {
+    $('#GraphicsOwnData_Panel').hide();
+    $('#GraphicsOwnData_PanelGP').show();
+}
+function CallGP() {
+    require([
+  "esri/tasks/Geoprocessor", "esri/layers/ImageParameters", "esri/tasks/FeatureSet"],
+  function (Geoprocessor, ImageParameters, FeatureSet) {
+      //var graphic = new Graphic( ... );
+      var layer = PropiedadesOwnData.map.getLayer("csvLayer");
+      //var features = [];
+      //for (var i = 0; i < layer.graphics.length; i++) {
+      //    features.push(layer.graphics[i]);
+      //}
+      var radius=$("#radiusGP").val();
+      var field = $("#zValueFieldGP").val();
+      var featureSet = new FeatureSet();
+      featureSet.features = layer.graphics;
+      //PropiedadesOwnData.map
+      var params = {
+          "InterpolatePoints": featureSet,
+          "Z_value": field,
+          "Output_cell_size": "",
+          "Search_radius": "VARIABLE " + radius
+
+      };
+      var gp = new Geoprocessor("http://barreto.md.ieo.es/arcgis/rest/services/UNESCO/Interpolation/GPServer/Interpolation");
+      gp.submitJob(params, function (jobInfo) {
+          console.log("OK");
+          if (jobInfo.jobStatus != "esriJobFailed") {
+              gp.getResultImageLayer(jobInfo.jobId, null, null, function (gpLayer) {
+                  gpLayer.setOpacity(0.5);
+                  PropiedadesOwnData.map.addLayer(gpLayer);
+              });
+          } else {
+              console.error("EL GP ha fallado : " + jobInfo.jobStatus)
+          }
+      }, function () {
+          console.log("Executing");
+      },
+      function () {
+          console.log("Error");
+      });
+  });
+
+}
 
 //#region Graph
 function CreateGraph() {
@@ -161,7 +210,7 @@ function CreateGraph() {
             series: Series
         });
     });
-   
+
 }
 //#endregion
 
